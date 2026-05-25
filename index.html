@@ -429,25 +429,27 @@
       display: block;
     }
 
-    .store-banner {
-      margin: 48px auto 0;
-      background: #ffe189;
-      padding: 0;
-      width: 100%;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 0;
-    }
+   .store-banner {
+  margin: 48px auto 0;
+  background: #ffe189;
+  padding: 0;
+  width: 100%;
+  height: 170px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
 
-    .store-banner-logo {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: contain;
-      object-position: center;
-    }
+.store-banner-logo {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
 
     .store-about {
       background: #fcf6ec;
@@ -533,6 +535,15 @@
         width: min(100% - 16px, 1180px);
         padding-top: 8px;
       }
+      .store-banner {
+  height: 115px;
+}
+
+.store-banner-logo {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+}
 
       .top-header {
         flex-direction: column;
