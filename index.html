@@ -429,31 +429,26 @@
       display: block;
     }
 
-  .store-banner-logo {
-      width: 520px;
-      max-width: 90%;
-      height: auto;
-      display: block;
-      margin: 0 auto;
+    .store-banner {
+      margin: 48px auto 0;
+      background: #ffe189;
+      padding: 0;
+      width: 100%;
+      height: 150px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 0;
     }
-  margin: 48px auto 0;
-  background: #ffe189;
-  padding: 0;
-  text-align: center;
-  width: 100%;
-  line-height: 0;
-  overflow: hidden;
-}
 
-    .store-about {
-      background: #fcf6ec;
-.store-banner-logo {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  object-fit: contain;
-}
+    .store-banner-logo {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+    }
 
     .store-about {
       background: #fcf6ec;
@@ -485,26 +480,27 @@
       line-height: 1.75;
       color: rgba(81, 50, 41, 0.78);
     }
-.store-signature {
-  margin: 34px auto 0;
-  text-align: center;
-  font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.98rem;
-  font-weight: 400;
-  line-height: 1.8;
-  color: rgba(81, 50, 41, 0.78);
-}
 
-.store-signature a {
-  color: var(--ocean-blue);
-  font-weight: 600;
-  text-decoration: none;
-}
+    .store-signature {
+      margin: 34px auto 0;
+      text-align: center;
+      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.98rem;
+      font-weight: 400;
+      line-height: 1.8;
+      color: rgba(81, 50, 41, 0.78);
+    }
 
-.store-signature a:hover {
-  text-decoration: underline;
-}
-    
+    .store-signature a {
+      color: var(--ocean-blue);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .store-signature a:hover {
+      text-decoration: underline;
+    }
+
     footer {
       padding: 32px 0 0;
       color: rgba(81, 50, 41, 0.58);
@@ -566,9 +562,8 @@
         grid-template-columns: 1fr;
       }
 
-      .store-banner-logo {
-        width: 420px;
-        max-width: 86%;
+      .store-banner {
+        height: 105px;
       }
     }
   </style>
@@ -604,22 +599,21 @@
       <img class="store-banner-logo" src="imagens/logo%20Bible%20bites%20store.png" alt="Bible Bites Store" />
     </section>
 
-<section class="store-about" aria-label="Sobre a Bible Bites">
-  <div class="store-about-inner">
-    <h2>BIBLE BITES?</h2>
+    <section class="store-about" aria-label="Sobre a Bible Bites">
+      <div class="store-about-inner">
+        <h2>BIBLE BITES?</h2>
 
-    <p>
-          Bible Bites (store) surgiu como extensão à conta de instagram @biblebites.pt e é uma pequena loja criada para transformar mensagens bíblicas em artigos simples, bonitos e com significado. Cada peça é pensada para recordar a Palavra de Deus no dia a dia, seja para uso pessoal, para oferecer ou para partilhar fé de forma criativa. 
-    </p>
+        <p>
+          Bible Bites (store) surgiu como extensão à conta de instagram @biblebites.pt e é uma pequena loja criada para transformar mensagens bíblicas em artigos simples, bonitos e com significado. Cada peça é pensada para recordar a Palavra de Deus no dia a dia, seja para uso pessoal, para oferecer ou para partilhar fé de forma criativa.
+        </p>
 
-    <p class="store-signature">
-      Obrigada por estares aqui,<br>
-      Inês Ratilal — criadora de 
-      <a href="https://www.instagram.com/biblebites.pt" target="_blank" rel="noreferrer">@biblebites.pt</a>
-    </p>
-  </div>
-</section>
-  
+        <p class="store-signature">
+          Obrigada por estares aqui,<br>
+          Inês Ratilal — criadora de
+          <a href="https://www.instagram.com/biblebites.pt" target="_blank" rel="noreferrer">@biblebites.pt</a>
+        </p>
+      </div>
+    </section>
 
     <footer>
       © Bible Bites · Vê o catálogo no site e encomenda por mensagem direta · instagram: @biblebites.pt
