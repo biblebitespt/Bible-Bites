@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bible Bites — Catálogo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --mother-earth: #513229;
+      --background: #f0f9ff;
+      --something-blue: #d8ebf9;
+      --the-bay: #fce6b7;
+      --sky-blue: #75b4ea;
+      --ocean-blue: #2f6fa8;
+      --honey: #f4bd35;
+      --butter-yellow: #ffe59b;
+      --white: #fffaf0;
+      --shadow: 0 18px 50px rgba(81, 50, 41, 0.14);
+      --radius: 28px;
+      --gap: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Poppins", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--background);
+      color: var(--mother-earth);
+    }
+
+    body.drawer-open { overflow: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    .site-shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 20px 0 48px;
+    }
+
+    .top-header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px 0 22px;
+      background: rgba(240, 249, 255, 0.76);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-link { display: inline-flex; align-items: center; justify-content: center; }
+
+    .logo-img {
+      width: min(260px, 58vw);
+      height: auto;
+      display: block;
+    }
+
+
+    .floating-actions {
+      position: absolute;
+      right: 0;
+      top: 26px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pill, .filter-btn {
+      border: 1px solid rgba(81, 50, 41, 0.12);
+      background: rgba(255, 250, 240, 0.78);
+      color: var(--mother-earth);
+      border-radius: 999px;
+      padding: 10px 15px;
+      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform 180ms ease, background 180ms ease;
+      white-space: nowrap;
+      box-shadow: 0 8px 20px rgba(81, 50, 41, 0.06);
+    }
+
+    .pill:hover, .filter-btn:hover { transform: translateY(-2px); background: var(--the-bay); }
+    .filter-btn.active { background: var(--mother-earth); color: var(--background); }
+
+    .gallery-heading {
+      margin: 8px 0 24px;
+      text-align: center;
+    }
+
+    .gallery-heading h1 {
+      margin: 0;
+      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(1.05rem, 2.6vw, 1.6rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mother-earth);
+    }
+
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; padding: 8px 0 18px; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
+    }
+
+    .product-card {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border: 0;
+      padding: 0;
+      background: #d2d2c9;
+      cursor: pointer;
+      overflow: hidden;
+      display: block;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.001);
+      transition: transform 220ms ease, filter 220ms ease;
+      filter: saturate(0.95) contrast(0.96);
+    }
+
+    .product-card:hover img { transform: scale(1.045); filter: saturate(1.03) contrast(1.01); }
+
+    .product-card.no-image {
+      background: transparent;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .product-card.no-image img,
+    .product-card.no-image .ref-chip,
+    .product-card.no-image .heart-badge {
+      display: none;
+    }
+
+    .heart-badge {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 0;
+      background: rgba(255, 250, 240, 0.88);
+      color: var(--mother-earth);
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      backdrop-filter: blur(8px);
+    }
+
+    .heart-badge.saved { background: var(--the-bay); color: #d75f79; }
+
+    .ref-chip {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      border-radius: 999px;
+      padding: 6px 9px;
+      background: rgba(81, 50, 41, 0.62);
+      color: var(--background);
+      font-size: 0.72rem;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .product-card:hover .ref-chip { opacity: 1; transform: translateY(0); }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(81, 50, 41, 0.36);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+      z-index: 40;
+    }
+
+    .overlay.open { opacity: 1; pointer-events: auto; }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(980px, 100%);
+      height: 100dvh;
+      background: var(--background);
+      box-shadow: -24px 0 70px rgba(81, 50, 41, 0.24);
+      transform: translateX(104%);
+      transition: transform 280ms cubic-bezier(.22,.8,.25,1);
+      z-index: 50;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      overflow: hidden;
+    }
+
+    .drawer.open { transform: translateX(0); }
+
+    .drawer-media { background: #d2d2c9; min-height: 100%; }
+    .drawer-media.no-image { background: transparent; }
+    .drawer-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .drawer-media.no-image img { display: none; }
+
+    .drawer-info {
+      padding: clamp(24px, 4vw, 52px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+      overflow-y: auto;
+    }
+
+    .close-btn {
+      align-self: flex-end;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 0;
+      background: var(--mother-earth);
+      color: var(--background);
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .detail-kicker {
+      margin: 0 0 14px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(81, 50, 41, 0.62);
+    }
+
+    .drawer-info h3 {
+      margin: 0;
+      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(2.2rem, 5vw, 5rem);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      color: var(--ocean-blue);
+      text-transform: lowercase;
+    }
+
+    .price { margin: 18px 0 0; font-size: 1.5rem; color: var(--mother-earth); font-weight: 700; }
+    .description { margin: 28px 0 0; color: rgba(81, 50, 41, 0.76); font-size: 1.05rem; line-height: 1.62; }
+
+    .meta-grid { margin-top: 26px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .meta { background: rgba(255, 250, 240, 0.72); border-radius: 18px; padding: 14px; min-height: 72px; }
+    .meta span { display: block; color: rgba(81, 50, 41, 0.55); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 6px; }
+    .meta strong { font-size: 1rem; }
+
+    .cta-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+
+    .want-btn, .save-btn {
+      border: 0;
+      border-radius: 999px;
+      min-height: 58px;
+      padding: 0 22px;
+      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 180ms ease, filter 180ms ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .want-btn { background: var(--sky-blue); color: var(--butter-yellow); }
+    .save-btn { width: 58px; background: var(--the-bay); color: var(--mother-earth); font-size: 1.3rem; }
+    .want-btn:hover, .save-btn:hover { transform: translateY(-2px); filter: brightness(0.98); }
+
+    .copy-note { margin: 12px 0 0; min-height: 22px; font-size: 0.88rem; color: rgba(81, 50, 41, 0.65); }
+
+    .empty-state {
+      display: none;
+      padding: 60px 22px;
+      text-align: center;
+      border-radius: var(--radius);
+      background: rgba(255, 250, 240, 0.7);
+      margin-top: 10px;
+    }
+    .empty-state.show { display: block; }
+
+    footer { padding: 32px 0 0; color: rgba(81, 50, 41, 0.58); font-size: 0.92rem; }
+
+    @media (max-width: 860px) {
+      .gallery { grid-template-columns: repeat(3, 1fr); }
+      .drawer { grid-template-columns: 1fr; grid-template-rows: minmax(280px, 48vh) 1fr; }
+      .drawer-info { padding-bottom: 90px; }
+      .cta-row { position: sticky; bottom: 0; background: linear-gradient(180deg, rgba(240, 249, 255, 0), var(--background) 20%); padding-top: 20px; }
+    }
+
+    @media (max-width: 560px) {
+      .site-shell { width: min(100% - 16px, 1180px); padding-top: 8px; }
+      .top-header { flex-direction: column; gap: 12px; position: relative; }
+      .floating-actions { position: static; }
+      .logo-img { width: min(220px, 70vw); }
+      .gallery { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+      .drawer-info h3 { font-size: 3rem; }
+      .meta-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="site-shell">
+    <header class="top-header">
+      <a class="logo-link" href="#top" aria-label="Bible Bites, voltar ao início">
+        <img class="logo-img" src="imagens/logo.png.png" alt="Bible Bites" />
+      </a>
+
+      <div class="floating-actions">
+        <a class="pill" href="https://www.instagram.com/biblebites.pt?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer">Instagram</a>
+        <button class="pill" id="showSavedBtn" type="button">♡ guardados</button>
+      </div>
+    </header>
+
+    <section class="gallery-heading" id="top" aria-labelledby="galleryTitle">
+      <h1 id="galleryTitle">GALERIA DE ARTIGOS</h1>
+    </section>
+
+    <nav class="filters" aria-label="Filtros de artigos">
+      <button class="filter-btn active" type="button" data-filter="todos">Todos</button>
+      <button class="filter-btn" type="button" data-filter="charms">Charms</button>
+      <button class="filter-btn" type="button" data-filter="guardados">Guardados</button>
+    </nav>
+
+    <section class="gallery" id="gallery" aria-label="Galeria de artigos"></section>
+    <section class="empty-state" id="emptyState">Ainda não há artigos guardados.</section>
+
+    <footer>
+      © Bible Bites · Catálogo por mensagem direta · 
+    </footer>
+  </main>
+
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
+
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Detalhe do artigo">
+    <div class="drawer-media">
+      <img id="drawerImg" src="" alt="" />
+    </div>
+
+    <div class="drawer-info">
+      <button class="close-btn" id="closeDrawerBtn" type="button" aria-label="Fechar">×</button>
+
+      <div>
+        <p class="detail-kicker" id="drawerRef"></p>
+        <h3 id="drawerTitle"></h3>
+        <p class="price" id="drawerPrice"></p>
+        <p class="description" id="drawerDescription"></p>
+
+        <div class="meta-grid">
+          <div class="meta">
+            <span>Nota</span>
+            <strong id="drawerNote"></strong>
+          </div>
+          <div class="meta">
+            <span>Tamanho</span>
+            <strong id="drawerSize"></strong>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="cta-row">
+          <button class="want-btn" id="wantBtn" type="button">🛒 Eu quero!</button>
+          <button class="save-btn" id="saveBtn" type="button" aria-label="Guardar artigo">♡</button>
+        </div>
+        <p class="copy-note" id="copyNote"></p>
+      </div>
+    </div>
+  </aside>
+
+  <script>
+    const INSTAGRAM_USERNAME = "biblebites.pt";
+
+    const produtos = [
+      {
+        ref: "Frutos do Espírito - charms",
+        titulo: "Frutos do Espírito",
+        descricao: '"Mas o fruto do Espírito é: amor, gozo, paz, longanimidade, benignidade, bondade, fé, mansidão, temperança. Contra essas coisas não há lei." - Gálatas 5:22-23',
+        preco: "7 €",
+        categoria: "Charms",
+        tamanho: "único",
+        nota: "os frutos são aleatórios",
+        imagem: "imagens/bb-001.jpg.jpeg"
+      },
+      {
+        ref: "Lírios - charms",
+        titulo: "Lírios",
+        descricao: '"E, quanto ao vestuário, porque andais solícitos? Olhai para os lírios do campo, como eles crescem; não trabalham, nem fiam. E eu vos digo que nem mesmo Salomão, em toda a sua glória, se vestiu como qualquer deles. Pois, se Deus assim veste a erva do campo, que hoje existe e amanhã é lançada no forno, não vos vestirá muito mais a vós, homens de pequena fé?" - Mateus 6:28-30',
+        preco: "7 €",
+        categoria: "Charms",
+        tamanho: "único",
+        nota: "",
+        imagem: "imagens/bb-002.jpg.jpeg"
+      }
+    ];
+
+
+    const gallery = document.querySelector("#gallery");
+    const drawer = document.querySelector("#drawer");
+    const overlay = document.querySelector("#overlay");
+    const emptyState = document.querySelector("#emptyState");
+    const drawerMedia = document.querySelector(".drawer-media");
+    const drawerImg = document.querySelector("#drawerImg");
+    const drawerRef = document.querySelector("#drawerRef");
+    const drawerTitle = document.querySelector("#drawerTitle");
+    const drawerPrice = document.querySelector("#drawerPrice");
+    const drawerDescription = document.querySelector("#drawerDescription");
+    const drawerNote = document.querySelector("#drawerNote");
+    const drawerSize = document.querySelector("#drawerSize");
+    const wantBtn = document.querySelector("#wantBtn");
+    const saveBtn = document.querySelector("#saveBtn");
+    const copyNote = document.querySelector("#copyNote");
+    const closeDrawerBtn = document.querySelector("#closeDrawerBtn");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const showSavedBtn = document.querySelector("#showSavedBtn");
+
+    let produtoAtivo = null;
+    let filtroAtivo = "todos";
+    const savedRefs = new Set(JSON.parse(localStorage.getItem("bibleBitesGuardados") || "[]"));
+
+    function saveStorage() { localStorage.setItem("bibleBitesGuardados", JSON.stringify([...savedRefs])); }
+    function isSaved(ref) { return savedRefs.has(ref); }
+
+    function toggleSaved(ref) {
+      if (savedRefs.has(ref)) savedRefs.delete(ref);
+      else savedRefs.add(ref);
+      saveStorage();
+      renderGallery();
+      updateSaveButton();
+    }
+
+    function produtoVisivel(produto) {
+      if (filtroAtivo === "guardados") return isSaved(produto.ref);
+      if (filtroAtivo === "todos") return true;
+      return produto.categoria === filtroAtivo;
+    }
+
+    function hasImage(produto) {
+      return Boolean(produto.imagem && produto.imagem.trim());
+    }
+
+    function renderGallery() {
+      gallery.innerHTML = "";
+      const filtrados = produtos.filter(produtoVisivel);
+      emptyState.classList.toggle("show", filtrados.length === 0);
+
+      filtrados.forEach((produto) => {
+        const card = document.createElement("button");
+        card.className = "product-card";
+        card.type = "button";
+        card.setAttribute("aria-label", `Abrir artigo ${produto.ref}`);
+
+        if (!hasImage(produto)) {
+          card.classList.add("no-image");
+          card.setAttribute("aria-hidden", "true");
+          card.tabIndex = -1;
+          gallery.appendChild(card);
+          return;
+        }
+
+        card.innerHTML = `
+          <img src="${produto.imagem}" alt="${produto.titulo}" loading="lazy" />
+          <span class="ref-chip">${produto.ref}</span>
+          <span class="heart-badge ${isSaved(produto.ref) ? "saved" : ""}" aria-hidden="true">${isSaved(produto.ref) ? "♥" : "♡"}</span>
+        `;
+
+        const img = card.querySelector("img");
+        img.addEventListener("error", () => {
+          card.classList.add("no-image");
+          card.innerHTML = "";
+          card.setAttribute("aria-hidden", "true");
+          card.tabIndex = -1;
+        }, { once: true });
+
+        card.addEventListener("click", () => openDrawer(produto));
+        gallery.appendChild(card);
+      });
+    }
+
+    function openDrawer(produto) {
+      produtoAtivo = produto;
+
+      drawerImg.onerror = null;
+      drawerMedia.classList.toggle("no-image", !hasImage(produto));
+      drawerImg.src = hasImage(produto) ? produto.imagem : "";
+      drawerImg.alt = hasImage(produto) ? produto.titulo : "";
+      drawerImg.onerror = () => {
+        drawerMedia.classList.add("no-image");
+        drawerImg.src = "";
+        drawerImg.alt = "";
+      };
+
+      drawerRef.textContent = produto.ref;
+      drawerTitle.textContent = produto.titulo;
+      drawerPrice.textContent = produto.preco;
+      drawerDescription.textContent = produto.descricao;
+      drawerNote.textContent = produto.nota || "";
+      drawerSize.textContent = produto.tamanho;
+      copyNote.textContent = "";
+      updateSaveButton();
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      document.body.classList.add("drawer-open");
+      drawer.setAttribute("aria-hidden", "false");
+      overlay.setAttribute("aria-hidden", "false");
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      document.body.classList.remove("drawer-open");
+      drawer.setAttribute("aria-hidden", "true");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    function updateSaveButton() {
+      if (!produtoAtivo) return;
+      const saved = isSaved(produtoAtivo.ref);
+      saveBtn.textContent = saved ? "♥" : "♡";
+      saveBtn.setAttribute("aria-label", saved ? "Remover dos guardados" : "Guardar artigo");
+    }
+
+    async function copyMessage(message) {
+      try {
+        await navigator.clipboard.writeText(message);
+        copyNote.textContent = "Mensagem copiada. Se o Instagram não a preencher, cola no chat.";
+      } catch (error) {
+        copyNote.textContent = "Se o Instagram não preencher a mensagem, copia a referência: " + produtoAtivo.ref;
+      }
+    }
+
+function abrirInstagram() {
+  if (!produtoAtivo) return;
+
+  const mensagem = `Olá! Quero comprar/reservar o artigo ${produtoAtivo.titulo}`;
+  copyMessage(mensagem);
+
+  const instagramUrl = "https://www.instagram.com/biblebites.pt?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==";
+  window.open(instagramUrl, "_blank", "noopener,noreferrer");
+}
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        filtroAtivo = button.dataset.filter;
+        filterButtons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+        renderGallery();
+      });
+    });
+
+    showSavedBtn.addEventListener("click", () => {
+      filtroAtivo = "guardados";
+      filterButtons.forEach((btn) => btn.classList.toggle("active", btn.dataset.filter === "guardados"));
+      renderGallery();
+      window.scrollTo({ top: document.querySelector(".filters").offsetTop - 80, behavior: "smooth" });
+    });
+
+    wantBtn.addEventListener("click", abrirInstagram);
+    saveBtn.addEventListener("click", () => produtoAtivo && toggleSaved(produtoAtivo.ref));
+    closeDrawerBtn.addEventListener("click", closeDrawer);
+    overlay.addEventListener("click", closeDrawer);
+    window.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDrawer(); });
+
+    renderGallery();
+  </script>
+</body>
+</html>
