@@ -38,7 +38,11 @@
     }
 
     body.drawer-open { overflow: hidden; }
-    a { color: inherit; text-decoration: none; }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
     .site-shell {
       width: min(1180px, calc(100% - 28px));
@@ -57,10 +61,10 @@
       backdrop-filter: blur(12px);
     }
 
-    .logo-link { 
-      display: inline-flex; 
-      align-items: center; 
-      justify-content: center; 
+    .logo-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .logo-img {
@@ -78,7 +82,8 @@
       align-items: center;
     }
 
-    .pill, .filter-btn {
+    .pill,
+    .filter-btn {
       border: 1px solid rgba(81, 50, 41, 0.12);
       background: rgba(255, 250, 240, 0.78);
       color: var(--mother-earth);
@@ -92,14 +97,15 @@
       box-shadow: 0 8px 20px rgba(81, 50, 41, 0.06);
     }
 
-    .pill:hover, .filter-btn:hover { 
-      transform: translateY(-2px); 
-      background: var(--the-bay); 
+    .pill:hover,
+    .filter-btn:hover {
+      transform: translateY(-2px);
+      background: var(--the-bay);
     }
 
-    .filter-btn.active { 
-      background: var(--mother-earth); 
-      color: var(--background); 
+    .filter-btn.active {
+      background: var(--mother-earth);
+      color: var(--background);
     }
 
     .gallery-heading {
@@ -118,11 +124,11 @@
       color: var(--mother-earth);
     }
 
-    .filters { 
-      display: flex; 
-      gap: 10px; 
-      flex-wrap: wrap; 
-      padding: 8px 0 18px; 
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 8px 0 18px;
     }
 
     .gallery {
@@ -152,9 +158,9 @@
       filter: saturate(0.95) contrast(0.96);
     }
 
-    .product-card:hover img { 
-      transform: scale(1.045); 
-      filter: saturate(1.03) contrast(1.01); 
+    .product-card:hover img {
+      transform: scale(1.045);
+      filter: saturate(1.03) contrast(1.01);
     }
 
     .product-card.no-image {
@@ -185,9 +191,9 @@
       backdrop-filter: blur(8px);
     }
 
-    .heart-badge.saved { 
-      background: var(--the-bay); 
-      color: #d75f79; 
+    .heart-badge.saved {
+      background: var(--the-bay);
+      color: #d75f79;
     }
 
     .ref-chip {
@@ -205,9 +211,9 @@
       transition: opacity 180ms ease, transform 180ms ease;
     }
 
-    .product-card:hover .ref-chip { 
-      opacity: 1; 
-      transform: translateY(0); 
+    .product-card:hover .ref-chip {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .overlay {
@@ -221,9 +227,9 @@
       z-index: 40;
     }
 
-    .overlay.open { 
-      opacity: 1; 
-      pointer-events: auto; 
+    .overlay.open {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .drawer {
@@ -242,28 +248,28 @@
       overflow: hidden;
     }
 
-    .drawer.open { 
-      transform: translateX(0); 
+    .drawer.open {
+      transform: translateX(0);
     }
 
-    .drawer-media { 
-      background: #d2d2c9; 
-      min-height: 100%; 
+    .drawer-media {
+      background: #d2d2c9;
+      min-height: 100%;
     }
 
-    .drawer-media.no-image { 
-      background: transparent; 
+    .drawer-media.no-image {
+      background: transparent;
     }
 
-    .drawer-media img { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
-      display: block; 
+    .drawer-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
-    .drawer-media.no-image img { 
-      display: none; 
+    .drawer-media.no-image img {
+      display: none;
     }
 
     .drawer-info {
@@ -306,55 +312,56 @@
       text-transform: lowercase;
     }
 
-    .price { 
-      margin: 18px 0 0; 
-      font-size: 1.5rem; 
-      color: var(--mother-earth); 
-      font-weight: 700; 
+    .price {
+      margin: 18px 0 0;
+      font-size: 1.5rem;
+      color: var(--mother-earth);
+      font-weight: 700;
     }
 
-    .description { 
-      margin: 28px 0 0; 
-      color: rgba(81, 50, 41, 0.76); 
-      font-size: 1.05rem; 
-      line-height: 1.62; 
+    .description {
+      margin: 28px 0 0;
+      color: rgba(81, 50, 41, 0.76);
+      font-size: 1.05rem;
+      line-height: 1.62;
     }
 
-    .meta-grid { 
-      margin-top: 26px; 
-      display: grid; 
-      grid-template-columns: repeat(2, minmax(0, 1fr)); 
-      gap: 10px; 
+    .meta-grid {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
     }
 
-    .meta { 
-      background: rgba(255, 250, 240, 0.72); 
-      border-radius: 18px; 
-      padding: 14px; 
-      min-height: 72px; 
+    .meta {
+      background: rgba(255, 250, 240, 0.72);
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 72px;
     }
 
-    .meta span { 
-      display: block; 
-      color: rgba(81, 50, 41, 0.55); 
-      font-size: 0.74rem; 
-      text-transform: uppercase; 
-      letter-spacing: 0.09em; 
-      margin-bottom: 6px; 
+    .meta span {
+      display: block;
+      color: rgba(81, 50, 41, 0.55);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      margin-bottom: 6px;
     }
 
-    .meta strong { 
-      font-size: 1rem; 
+    .meta strong {
+      font-size: 1rem;
     }
 
-    .cta-row { 
-      display: grid; 
-      grid-template-columns: 1fr auto; 
-      gap: 10px; 
-      align-items: center; 
+    .cta-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
     }
 
-    .want-btn, .save-btn {
+    .want-btn,
+    .save-btn {
       border: 0;
       border-radius: 999px;
       min-height: 58px;
@@ -370,21 +377,22 @@
       gap: 10px;
     }
 
-    .want-btn { 
-      background: var(--sky-blue); 
-      color: var(--butter-yellow); 
+    .want-btn {
+      background: var(--sky-blue);
+      color: var(--butter-yellow);
     }
 
-    .save-btn { 
-      width: 58px; 
-      background: var(--the-bay); 
-      color: var(--mother-earth); 
-      font-size: 1.3rem; 
+    .save-btn {
+      width: 58px;
+      background: var(--the-bay);
+      color: var(--mother-earth);
+      font-size: 1.3rem;
     }
 
-    .want-btn:hover, .save-btn:hover { 
-      transform: translateY(-2px); 
-      filter: brightness(0.98); 
+    .want-btn:hover,
+    .save-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(0.98);
     }
 
     .order-help {
@@ -395,11 +403,11 @@
       color: rgba(81, 50, 41, 0.58);
     }
 
-    .copy-note { 
-      margin: 12px 0 0; 
-      min-height: 22px; 
-      font-size: 0.88rem; 
-      color: rgba(81, 50, 41, 0.65); 
+    .copy-note {
+      margin: 12px 0 0;
+      min-height: 22px;
+      font-size: 0.88rem;
+      color: rgba(81, 50, 41, 0.65);
     }
 
     .empty-state {
@@ -411,69 +419,108 @@
       margin-top: 10px;
     }
 
-    .empty-state.show { 
-      display: block; 
+    .empty-state.show {
+      display: block;
     }
 
-    footer { 
-      padding: 32px 0 0; 
-      color: rgba(81, 50, 41, 0.58); 
-      font-size: 0.92rem; 
+    .store-explanation {
+      margin: 48px 0 0;
+      background: #ffe189;
+      padding: clamp(42px, 7vw, 82px) 22px;
+      text-align: center;
+    }
+
+    .store-explanation-inner {
+      width: min(820px, 100%);
+      margin: 0 auto;
+    }
+
+    .store-explanation-logo {
+      width: min(420px, 82vw);
+      height: auto;
+      display: block;
+      margin: 0 auto 26px;
+    }
+
+    .store-explanation h2 {
+      margin: 0 0 18px;
+      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(1.7rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mother-earth);
+    }
+
+    .store-explanation p {
+      margin: 0 auto;
+      max-width: 680px;
+      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(0.98rem, 2vw, 1.08rem);
+      font-weight: 400;
+      line-height: 1.75;
+      color: rgba(81, 50, 41, 0.78);
+    }
+
+    footer {
+      padding: 32px 0 0;
+      color: rgba(81, 50, 41, 0.58);
+      font-size: 0.92rem;
     }
 
     @media (max-width: 860px) {
-      .gallery { 
-        grid-template-columns: repeat(3, 1fr); 
+      .gallery {
+        grid-template-columns: repeat(3, 1fr);
       }
 
-      .drawer { 
-        grid-template-columns: 1fr; 
-        grid-template-rows: minmax(280px, 48vh) 1fr; 
+      .drawer {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(280px, 48vh) 1fr;
       }
 
-      .drawer-info { 
-        padding-bottom: 90px; 
+      .drawer-info {
+        padding-bottom: 90px;
       }
 
-      .cta-row { 
-        position: sticky; 
-        bottom: 0; 
-        background: linear-gradient(180deg, rgba(240, 249, 255, 0), var(--background) 20%); 
-        padding-top: 20px; 
+      .cta-row {
+        position: sticky;
+        bottom: 0;
+        background: linear-gradient(180deg, rgba(240, 249, 255, 0), var(--background) 20%);
+        padding-top: 20px;
       }
     }
 
     @media (max-width: 560px) {
-      .site-shell { 
-        width: min(100% - 16px, 1180px); 
-        padding-top: 8px; 
+      .site-shell {
+        width: min(100% - 16px, 1180px);
+        padding-top: 8px;
       }
 
-      .top-header { 
-        flex-direction: column; 
-        gap: 12px; 
-        position: relative; 
+      .top-header {
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
       }
 
-      .floating-actions { 
-        position: static; 
+      .floating-actions {
+        position: static;
       }
 
-      .logo-img { 
-        width: min(220px, 70vw); 
+      .logo-img {
+        width: min(220px, 70vw);
       }
 
-      .gallery { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 7px; 
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 7px;
       }
 
-      .drawer-info h3 { 
-        font-size: 3rem; 
+      .drawer-info h3 {
+        font-size: 3rem;
       }
 
-      .meta-grid { 
-        grid-template-columns: 1fr; 
+      .meta-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -504,6 +551,18 @@
 
     <section class="gallery" id="gallery" aria-label="Galeria de artigos"></section>
     <section class="empty-state" id="emptyState">Ainda não há artigos guardados.</section>
+
+    <section class="store-explanation" aria-label="Explicação da loja Bible Bites">
+      <div class="store-explanation-inner">
+        <img class="store-explanation-logo" src="imagens/logo%20Bible%20bites%20store.png" alt="Bible Bites Store" />
+
+        <h2>BIBLE BITES?</h2>
+
+        <p>
+          A Bible Bites é uma pequena loja criada para transformar mensagens bíblicas em artigos simples, bonitos e com significado. Cada peça é pensada para recordar a Palavra de Deus no dia a dia, seja para uso pessoal, para oferecer ou para partilhar fé de forma criativa.
+        </p>
+      </div>
+    </section>
 
     <footer>
       © Bible Bites · Vê o catálogo no site e encomenda por mensagem direta · instagram: @biblebites.pt
@@ -602,12 +661,12 @@
     let filtroAtivo = "todos";
     const savedRefs = new Set(JSON.parse(localStorage.getItem("bibleBitesGuardados") || "[]"));
 
-    function saveStorage() { 
-      localStorage.setItem("bibleBitesGuardados", JSON.stringify([...savedRefs])); 
+    function saveStorage() {
+      localStorage.setItem("bibleBitesGuardados", JSON.stringify([...savedRefs]));
     }
 
-    function isSaved(ref) { 
-      return savedRefs.has(ref); 
+    function isSaved(ref) {
+      return savedRefs.has(ref);
     }
 
     function toggleSaved(ref) {
@@ -757,9 +816,9 @@
 
       renderGallery();
 
-      window.scrollTo({ 
-        top: document.querySelector(".filters").offsetTop - 80, 
-        behavior: "smooth" 
+      window.scrollTo({
+        top: document.querySelector(".filters").offsetTop - 80,
+        behavior: "smooth"
       });
     });
 
@@ -768,8 +827,8 @@
     closeDrawerBtn.addEventListener("click", closeDrawer);
     overlay.addEventListener("click", closeDrawer);
 
-    window.addEventListener("keydown", (event) => { 
-      if (event.key === "Escape") closeDrawer(); 
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeDrawer();
     });
 
     renderGallery();
