@@ -558,10 +558,10 @@
 function abrirInstagram() {
   if (!produtoAtivo) return;
 
-  const mensagem = `Olá! Quero comprar/reservar o artigo ${produtoAtivo.titulo}`;
+  const mensagem = `Olá! Quero comprar/reservar o artigo "${produtoAtivo.ref}"`;
   copyMessage(mensagem);
 
-  const instagramUrl = "https://www.instagram.com/biblebites.pt?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==";
+  const instagramUrl = `https://ig.me/m/biblebites.pt?text=${encodeURIComponent(mensagem)}`;
   window.open(instagramUrl, "_blank", "noopener,noreferrer");
 }
     filterButtons.forEach((button) => {
