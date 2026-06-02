@@ -154,19 +154,49 @@
       display: block;
     }
 
-    .product-card img {
+    .product-image-window {
       width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .product-image-track {
+      width: 300%;
+      height: 100%;
+      display: flex;
+      transform: translateX(0);
+      will-change: transform;
+    }
+
+    .product-card:hover .product-image-track {
+      animation: productImageScroll 4s linear infinite;
+    }
+
+    .product-image-track img {
+      width: calc(100% / 3);
       height: 100%;
       object-fit: cover;
       display: block;
       transform: scale(1.001);
-      transition: transform 220ms ease, filter 220ms ease;
+      transition: filter 220ms ease;
       filter: saturate(0.95) contrast(0.96);
+      flex: 0 0 calc(100% / 3);
     }
 
-    .product-card:hover img {
-      transform: scale(1.045);
+    .product-card:hover .product-image-track img {
       filter: saturate(1.03) contrast(1.01);
+    }
+
+    @keyframes productImageScroll {
+      0%, 45% {
+        transform: translateX(0);
+      }
+      50%, 95% {
+        transform: translateX(-33.333333%);
+      }
+      100% {
+        transform: translateX(-66.666667%);
+      }
     }
 
     .product-card.no-image {
@@ -259,8 +289,10 @@
     }
 
     .drawer-media {
+      position: relative;
       background: #d2d2c9;
       min-height: 100%;
+      overflow: hidden;
     }
 
     .drawer-media.no-image {
@@ -272,10 +304,39 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: opacity 180ms ease;
     }
 
-    .drawer-media.no-image img {
+    .drawer-media.no-image img,
+    .drawer-media.no-image .drawer-next-image {
       display: none;
+    }
+
+    .drawer-next-image {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 250, 240, 0.9);
+      color: var(--mother-earth);
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 22px rgba(81, 50, 41, 0.18);
+      backdrop-filter: blur(8px);
+      transition: transform 180ms ease, background 180ms ease;
+      z-index: 2;
+    }
+
+    .drawer-next-image:hover {
+      transform: translateY(-50%) translateX(2px);
+      background: var(--the-bay);
     }
 
     .drawer-info {
@@ -576,6 +637,10 @@
         opacity: 1;
         transform: none;
       }
+
+      .product-card:hover .product-image-track {
+        animation: none;
+      }
     }
 
     @media (max-width: 860px) {
@@ -708,6 +773,7 @@
   <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Detalhe do artigo">
     <div class="drawer-media">
       <img id="drawerImg" src="" alt="" />
+      <button class="drawer-next-image" id="drawerNextImageBtn" type="button" aria-label="Ver imagem seguinte">›</button>
     </div>
 
     <div class="drawer-info">
@@ -758,7 +824,8 @@
         categoria: "charms",
         tamanho: "único",
         nota: "Os frutos são aleatórios.",
-        imagem: "imagens/bb-001.jpg.jpeg"
+        imagem: "imagens/bb-001.jpg.jpeg",
+        imagem2: "imagens/bb-001-2.jpg.jpeg"
       },
       {
         ref: "Lírios",
@@ -768,28 +835,31 @@
         categoria: "charms",
         tamanho: "único",
         nota: "",
-        imagem: "imagens/bb-002.jpg.jpeg"
+        imagem: "imagens/bb-002.jpg.jpeg",
+        imagem2: "imagens/bb-002-2.jpg.jpeg"
       }
       ,
       {
-        ref: "Estojo 01",
-        titulo: "Nome do produto",
-        descricao: "Escreve aqui a descrição ou versículo associado ao estojo.",
-        preco: "0 €",
+        ref: "Estojo João 15:12",
+        titulo: "João 15:12",
+        descricao: ""O meu mandamento é este: Que vos ameis uns aos outros, assim como eu vos amei." João 15:12",
+        preco: "9 €",
         categoria: "estojos",
         tamanho: "editar",
-        nota: "Escreve aqui a nota do produto.",
-        imagem: "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20800%20800%22%3E%3Crect%20width%3D%22800%22%20height%3D%22800%22%20fill%3D%22%23fce6b7%22/%3E%3Crect%20x%3D%22150%22%20y%3D%22220%22%20width%3D%22500%22%20height%3D%22360%22%20rx%3D%2270%22%20fill%3D%22%23ffe59b%22%20stroke%3D%22%23513229%22%20stroke-width%3D%2218%22/%3E%3Cpath%20d%3D%22M230%20305h340%22%20stroke%3D%22%232f6fa8%22%20stroke-width%3D%2218%22%20stroke-linecap%3D%22round%22/%3E%3Ccircle%20cx%3D%22280%22%20cy%3D%22395%22%20r%3D%2218%22%20fill%3D%22%2375b4ea%22/%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22395%22%20r%3D%2218%22%20fill%3D%22%2375b4ea%22/%3E%3Ccircle%20cx%3D%22520%22%20cy%3D%22395%22%20r%3D%2218%22%20fill%3D%22%2375b4ea%22/%3E%3Ctext%20x%3D%22400%22%20y%3D%22670%22%20text-anchor%3D%22middle%22%20font-family%3D%22Poppins%2C%20Arial%22%20font-size%3D%2246%22%20font-weight%3D%22700%22%20fill%3D%22%23513229%22%3EEDITAR%20FOTO%3C/text%3E%3C/svg%3E"
+        nota: "Feito à mão. Modelo único!",
+        imagem: "imagens/Estojo J1512.png"
+        imagem2: "imagens/Estojo João 1512.jpeg"
       },
       {
         ref: "Estojo 02",
         titulo: "Nome do produto",
-        descricao: "Escreve aqui a descrição ou versículo associado ao estojo.",
-        preco: "0 €",
+        descricao: ""Tudo tem o seu tempo determinado, e há tempo para todo o propósito debaixo do céu." Eclesiastes 3:1",
+        preco: "9 €",
         categoria: "estojos",
         tamanho: "editar",
-        nota: "Escreve aqui a nota do produto.",
-        imagem: "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20800%20800%22%3E%3Crect%20width%3D%22800%22%20height%3D%22800%22%20fill%3D%22%23d8ebf9%22/%3E%3Crect%20x%3D%22145%22%20y%3D%22230%22%20width%3D%22510%22%20height%3D%22340%22%20rx%3D%2264%22%20fill%3D%22%23fffaf0%22%20stroke%3D%22%232f6fa8%22%20stroke-width%3D%2218%22/%3E%3Cpath%20d%3D%22M235%20320h330%22%20stroke%3D%22%23f4bd35%22%20stroke-width%3D%2218%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M240%20430h320%22%20stroke%3D%22%23513229%22%20stroke-width%3D%2214%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.55%22/%3E%3Ctext%20x%3D%22400%22%20y%3D%22670%22%20text-anchor%3D%22middle%22%20font-family%3D%22Poppins%2C%20Arial%22%20font-size%3D%2246%22%20font-weight%3D%22700%22%20fill%3D%22%23513229%22%3EEDITAR%20FOTO%3C/text%3E%3C/svg%3E"
+        nota: "Feito à mão. Modelo único!",
+        imagem: "imagens/Estojo Ec31.png
+        imagem2: "imagens/Estojo Eclesiastes 31.jpeg"
       }
     ];
 
@@ -799,6 +869,7 @@
     const emptyState = document.querySelector("#emptyState");
     const drawerMedia = document.querySelector(".drawer-media");
     const drawerImg = document.querySelector("#drawerImg");
+    const drawerNextImageBtn = document.querySelector("#drawerNextImageBtn");
     const drawerRef = document.querySelector("#drawerRef");
     const drawerTitle = document.querySelector("#drawerTitle");
     const drawerPrice = document.querySelector("#drawerPrice");
@@ -813,6 +884,7 @@
     const showSavedBtn = document.querySelector("#showSavedBtn");
 
     let produtoAtivo = null;
+    let drawerImageIndex = 0;
     let filtroAtivo = "todos";
     const savedRefs = new Set(JSON.parse(localStorage.getItem("bibleBitesGuardados") || "[]"));
 
@@ -860,8 +932,14 @@
       return produto.categoria === filtroAtivo;
     }
 
+    function getProductImages(produto) {
+      const imagem1 = produto.imagem && produto.imagem.trim() ? produto.imagem.trim() : "";
+      const imagem2 = produto.imagem2 && produto.imagem2.trim() ? produto.imagem2.trim() : imagem1;
+      return [imagem1, imagem2];
+    }
+
     function hasImage(produto) {
-      return Boolean(produto.imagem && produto.imagem.trim());
+      return Boolean(getProductImages(produto)[0]);
     }
 
     function renderGallery() {
@@ -883,15 +961,23 @@
           return;
         }
 
+        const [imagem1, imagem2] = getProductImages(produto);
+
         card.innerHTML = `
-          <img src="${produto.imagem}" alt="${produto.titulo}" loading="lazy" />
+          <div class="product-image-window" aria-hidden="true">
+            <div class="product-image-track">
+              <img src="${imagem1}" alt="" loading="lazy" />
+              <img src="${imagem2}" alt="" loading="lazy" />
+              <img src="${imagem1}" alt="" loading="lazy" />
+            </div>
+          </div>
           <span class="ref-chip">${produto.ref}</span>
           <span class="heart-badge ${isSaved(produto.ref) ? "saved" : ""}" aria-hidden="true">${isSaved(produto.ref) ? "♥" : "♡"}</span>
         `;
 
-        const img = card.querySelector("img");
+        const firstImg = card.querySelector("img");
 
-        img.addEventListener("error", () => {
+        firstImg.addEventListener("error", () => {
           card.classList.add("no-image");
           card.innerHTML = "";
           card.setAttribute("aria-hidden", "true");
@@ -907,17 +993,9 @@
 
     function openDrawer(produto) {
       produtoAtivo = produto;
+      drawerImageIndex = 0;
 
-      drawerImg.onerror = null;
-      drawerMedia.classList.toggle("no-image", !hasImage(produto));
-      drawerImg.src = hasImage(produto) ? produto.imagem : "";
-      drawerImg.alt = hasImage(produto) ? produto.titulo : "";
-
-      drawerImg.onerror = () => {
-        drawerMedia.classList.add("no-image");
-        drawerImg.src = "";
-        drawerImg.alt = "";
-      };
+      updateDrawerImage();
 
       drawerRef.textContent = produto.ref;
       drawerTitle.textContent = produto.titulo;
@@ -936,6 +1014,36 @@
       overlay.setAttribute("aria-hidden", "false");
     }
 
+
+    function updateDrawerImage() {
+      if (!produtoAtivo) return;
+
+      const imagens = getProductImages(produtoAtivo);
+      const imagemAtual = imagens[drawerImageIndex] || imagens[0];
+      const temImagem = Boolean(imagens[0]);
+
+      drawerImg.onerror = null;
+      drawerMedia.classList.toggle("no-image", !temImagem);
+      drawerNextImageBtn.hidden = !temImagem || !imagens[1];
+
+      drawerImg.src = temImagem ? imagemAtual : "";
+      drawerImg.alt = temImagem ? `${produtoAtivo.titulo} — imagem ${drawerImageIndex + 1}` : "";
+
+      drawerImg.onerror = () => {
+        drawerMedia.classList.add("no-image");
+        drawerNextImageBtn.hidden = true;
+        drawerImg.src = "";
+        drawerImg.alt = "";
+      };
+    }
+
+    function showNextDrawerImage(event) {
+      event.stopPropagation();
+      if (!produtoAtivo) return;
+
+      drawerImageIndex = drawerImageIndex === 0 ? 1 : 0;
+      updateDrawerImage();
+    }
     function closeDrawer() {
       drawer.classList.remove("open");
       overlay.classList.remove("open");
@@ -997,6 +1105,7 @@
       });
     });
 
+    drawerNextImageBtn.addEventListener("click", showNextDrawerImage);
     wantBtn.addEventListener("click", abrirInstagram);
     saveBtn.addEventListener("click", () => produtoAtivo && toggleSaved(produtoAtivo.ref));
     closeDrawerBtn.addEventListener("click", closeDrawer);
