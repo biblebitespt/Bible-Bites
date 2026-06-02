@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bible Bites — Catálogo</title>
+  <!-- catálogo revalidado: hover suave + imagem inicial dos estojos ajustada -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -169,7 +170,7 @@
     }
 
     .product-card:hover .product-image-track {
-      animation: productImageScroll 4s linear infinite;
+      animation: productImageScroll 4s cubic-bezier(.45, 0, .25, 1) infinite;
     }
 
     .product-image-track img {
@@ -188,10 +189,10 @@
     }
 
     @keyframes productImageScroll {
-      0%, 45% {
+      0%, 38% {
         transform: translateX(0);
       }
-      50%, 95% {
+      56%, 86% {
         transform: translateX(-33.333333%);
       }
       100% {
@@ -852,8 +853,8 @@
         imagem2: "imagens/Estojo João 1512.jpeg"
       },
       {
-        ref: "Estojo 02",
-        titulo: "Nome do produto",
+        ref: "Estojo Eclesiastes 3:1",
+        titulo: "Eclesiastes 3:1",
         descricao: '"Tudo tem o seu tempo determinado, e há tempo para todo o propósito debaixo do céu." Eclesiastes 3:1',
         preco: "9 €",
         categoria: "estojos",
@@ -994,7 +995,7 @@
 
     function openDrawer(produto) {
       produtoAtivo = produto;
-      drawerImageIndex = 0;
+      drawerImageIndex = produto.categoria === "estojos" ? 1 : 0;
 
       updateDrawerImage();
 
