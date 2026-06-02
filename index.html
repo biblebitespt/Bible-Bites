@@ -387,7 +387,7 @@
       line-height: 0.92;
       letter-spacing: -0.04em;
       color: var(--ocean-blue);
-      text-transform: lowercase;
+      text-transform: none;
     }
 
     .price {
@@ -868,7 +868,7 @@
         descricao: '"O meu mandamento é este: Que vos ameis uns aos outros, assim como eu vos amei." João 15:12',
         preco: "9 €",
         categoria: "estojos",
-        tamanho: "editar",
+        tamanho: "19 cm x 11 cm",
         nota: "Feito à mão. Modelo único!",
         imagem: "imagens/Estojo J1512.png",
         imagem2: "imagens/Estojo João 1512.jpeg"
@@ -879,7 +879,7 @@
         descricao: '"Tudo tem o seu tempo determinado, e há tempo para todo o propósito debaixo do céu." Eclesiastes 3:1',
         preco: "9 €",
         categoria: "estojos",
-        tamanho: "editar",
+        tamanho: "21 cm x 10 cm",
         nota: "Feito à mão. Modelo único!",
         imagem: "imagens/Estojo Ec31.png",
         imagem2: "imagens/Estojo Eclesiastes 31.jpeg"
@@ -1017,7 +1017,7 @@
     function openDrawer(produto) {
       produtoAtivo = produto;
       const imagensProduto = getProductImages(produto);
-      drawerImageIndex = produto.categoria === "estojos" && imagensProduto[1] ? 1 : 0;
+      drawerImageIndex = 0;
 
       updateDrawerImage();
 
