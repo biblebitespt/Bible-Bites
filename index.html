@@ -848,7 +848,8 @@
         tamanho: "único",
         nota: "Os frutos são aleatórios.",
         imagem: "imagens/bb-001.jpg.jpeg.png",
-        imagem2: "imagens/bb-001-2.png.png"
+        imagem2: "imagens/bb-001-2.png.png",
+        imagem3: "imagens/bb-001-3.png"
       },
       {
         ref: "Lírios",
@@ -956,9 +957,10 @@
     }
 
     function getProductImages(produto) {
-      const imagem1 = produto.imagem && produto.imagem.trim() ? produto.imagem.trim() : "";
-      const imagem2 = produto.imagem2 && produto.imagem2.trim() ? produto.imagem2.trim() : imagem1;
-      return [imagem1, imagem2];
+      return [produto.imagem, produto.imagem2, produto.imagem3]
+        .filter(Boolean)
+        .map((imagem) => imagem.trim())
+        .filter(Boolean);
     }
 
     function hasImage(produto) {
@@ -984,14 +986,17 @@
           return;
         }
 
-        const [imagem1, imagem2] = getProductImages(produto);
+        const imagens = getProductImages(produto);
+        const imagensPreview = imagens.length >= 3
+          ? imagens.slice(0, 3)
+          : imagens.length === 2
+            ? [imagens[0], imagens[1], imagens[0]]
+            : [imagens[0], imagens[0], imagens[0]];
 
         card.innerHTML = `
           <div class="product-image-window" aria-hidden="true">
             <div class="product-image-track">
-              <img src="${imagem1}" alt="" loading="lazy" />
-              <img src="${imagem2}" alt="" loading="lazy" />
-              <img src="${imagem1}" alt="" loading="lazy" />
+              ${imagensPreview.map((imagem) => `<img src="${imagem}" alt="" loading="lazy" />`).join("")}
             </div>
           </div>
           <span class="ref-chip">${produto.ref}</span>
@@ -1016,7 +1021,6 @@
 
     function openDrawer(produto) {
       produtoAtivo = produto;
-      const imagensProduto = getProductImages(produto);
       drawerImageIndex = 0;
 
       updateDrawerImage();
@@ -1048,7 +1052,7 @@
 
       drawerImg.onerror = null;
       drawerMedia.classList.toggle("no-image", !temImagem);
-      drawerNextImageBtn.hidden = !temImagem || !imagens[1];
+      drawerNextImageBtn.hidden = !temImagem || imagens.length <= 1;
 
       drawerImg.src = temImagem ? imagemAtual : "";
       drawerImg.alt = temImagem ? `${produtoAtivo.titulo} — imagem ${drawerImageIndex + 1}` : "";
@@ -1065,7 +1069,8 @@
       event.stopPropagation();
       if (!produtoAtivo) return;
 
-      drawerImageIndex = drawerImageIndex === 0 ? 1 : 0;
+      const imagens = getProductImages(produtoAtivo);
+      drawerImageIndex = (drawerImageIndex + 1) % imagens.length;
       updateDrawerImage();
     }
     function closeDrawer() {
