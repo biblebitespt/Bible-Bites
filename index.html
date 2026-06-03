@@ -169,7 +169,15 @@
     }
 
     .product-card:hover .product-image-track {
-      animation: productImageScroll 5.8s ease-in-out infinite;
+      animation: productImageScroll2 5.8s ease-in-out infinite;
+    }
+
+    .product-card.image-count-3 .product-image-track {
+      width: 400%;
+    }
+
+    .product-card.image-count-3:hover .product-image-track {
+      animation: productImageScroll3 8.7s ease-in-out infinite;
     }
 
     .product-image-track img {
@@ -183,11 +191,16 @@
       flex: 0 0 calc(100% / 3);
     }
 
+    .product-card.image-count-3 .product-image-track img {
+      width: calc(100% / 4);
+      flex-basis: calc(100% / 4);
+    }
+
     .product-card:hover .product-image-track img {
       filter: saturate(1.03) contrast(1.01);
     }
 
-    @keyframes productImageScroll {
+    @keyframes productImageScroll2 {
       0%, 34% {
         transform: translateX(0);
       }
@@ -196,6 +209,21 @@
       }
       100% {
         transform: translateX(-66.666667%);
+      }
+    }
+
+    @keyframes productImageScroll3 {
+      0%, 22.666667% {
+        transform: translateX(0);
+      }
+      33.333333%, 56% {
+        transform: translateX(-25%);
+      }
+      66.666667%, 89.333333% {
+        transform: translateX(-50%);
+      }
+      100% {
+        transform: translateX(-75%);
       }
     }
 
@@ -846,7 +874,7 @@
         preco: "6 €",
         categoria: "charms",
         tamanho: "único",
-        nota: "A combinação de frutos não é fixa!.",
+        nota: "Os frutos são aleatórios.",
         imagem: "imagens/bb-001.jpg.jpeg.png",
         imagem2: "imagens/bb-001-2.png.png",
         imagem3: "imagens/bb-001-3.png"
@@ -988,10 +1016,12 @@
 
         const imagens = getProductImages(produto);
         const imagensPreview = imagens.length >= 3
-          ? imagens.slice(0, 3)
+          ? [imagens[0], imagens[1], imagens[2], imagens[0]]
           : imagens.length === 2
             ? [imagens[0], imagens[1], imagens[0]]
             : [imagens[0], imagens[0], imagens[0]];
+
+        card.classList.toggle("image-count-3", imagens.length >= 3);
 
         card.innerHTML = `
           <div class="product-image-window" aria-hidden="true">
