@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bible Bites — Catálogo</title>
+  <title>Bible Bites — Estojos</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,9 +41,17 @@
       color: var(--mother-earth);
     }
 
+    body.drawer-open {
+      overflow: hidden;
+    }
+
     a {
       color: inherit;
       text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
     }
 
     .site-shell {
@@ -84,14 +92,12 @@
       align-items: center;
     }
 
-    .pill,
-    .filter-btn {
+    .pill {
       border: 1px solid rgba(81, 50, 41, 0.12);
       background: rgba(255, 250, 240, 0.78);
       color: var(--mother-earth);
       border-radius: 999px;
       padding: 10px 15px;
-      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
       font-size: 0.92rem;
       cursor: pointer;
       transition: transform 180ms ease, background 180ms ease;
@@ -99,15 +105,9 @@
       box-shadow: 0 8px 20px rgba(81, 50, 41, 0.06);
     }
 
-    .pill:hover,
-    .filter-btn:hover {
+    .pill:hover {
       transform: translateY(-2px);
       background: var(--the-bay);
-    }
-
-    .filter-btn.active {
-      background: var(--mother-earth);
-      color: var(--background);
     }
 
     .gallery-heading {
@@ -117,7 +117,6 @@
 
     .gallery-heading h1 {
       margin: 0;
-      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
       font-size: clamp(1.05rem, 2.6vw, 1.6rem);
       font-weight: 700;
       line-height: 1.2;
@@ -126,289 +125,639 @@
       color: var(--mother-earth);
     }
 
-    .filters {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding: 8px 0 18px;
+    .gallery-heading p {
+      margin: 10px auto 0;
+      max-width: 620px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      opacity: 0.82;
     }
 
-    .coming-soon {
-      min-height: clamp(260px, 38vw, 430px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: clamp(34px, 7vw, 90px) 12px;
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--gap);
     }
 
-    .coming-soon h2 {
-      margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(4.2rem, 13vw, 11rem);
-      font-weight: 700;
-      line-height: 0.85;
-      letter-spacing: -0.08em;
-      color: var(--mother-earth);
-      text-transform: uppercase;
-    }
-
-    .store-banner {
-      margin: 48px auto 0;
-      background: #ffe189;
+    .product-card {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border: 0;
       padding: 0;
-      width: 100%;
-      height: 150px;
+      background: #d2d2c9;
+      cursor: pointer;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 0;
-      border-radius: 28px;
-    }
-
-    .store-banner-logo {
-      height: 100%;
-      width: auto;
-      max-width: 100%;
       display: block;
-      object-fit: contain;
-      object-position: center;
     }
 
-    .store-about {
-      background: #fcf6ec;
-      padding: clamp(42px, 6vw, 72px) 22px;
-      text-align: center;
-      border-radius: 28px;
+    .product-image-window {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
-    .store-about-inner {
-      width: min(820px, 100%);
-      margin: 0 auto;
+    .product-image-track {
+      width: 300%;
+      height: 100%;
+      display: flex;
+      transform: translateX(0);
+      will-change: transform;
     }
 
-    .store-about h2 {
-      margin: 0 0 18px;
-      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
-      font-size: clamp(1.7rem, 4vw, 3rem);
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+    .product-card.image-count-3 .product-image-track {
+      width: 400%;
+    }
+
+    .product-card:hover .product-image-track {
+      animation: productImageScroll2 5.8s ease-in-out infinite;
+    }
+
+    .product-card.image-count-3:hover .product-image-track {
+      animation: productImageScroll3 8.7s ease-in-out infinite;
+    }
+
+    .product-image-track img {
+      width: calc(100% / 3);
+      flex: 0 0 calc(100% / 3);
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-card.image-count-3 .product-image-track img {
+      width: calc(100% / 4);
+      flex-basis: calc(100% / 4);
+    }
+
+    .product-card:hover .product-image-track img {
+      filter: saturate(1.03) contrast(1.01);
+    }
+
+    @keyframes productImageScroll2 {
+      0%, 34% {
+        transform: translateX(0);
+      }
+      50%, 84% {
+        transform: translateX(-33.333333%);
+      }
+      100% {
+        transform: translateX(-66.666667%);
+      }
+    }
+
+    @keyframes productImageScroll3 {
+      0%, 22.666667% {
+        transform: translateX(0);
+      }
+      33.333333%, 56% {
+        transform: translateX(-25%);
+      }
+      66.666667%, 89.333333% {
+        transform: translateX(-50%);
+      }
+      100% {
+        transform: translateX(-75%);
+      }
+    }
+
+    .product-card.no-image {
+      background: transparent;
+      cursor: default;
+    }
+
+    .ref-chip {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      z-index: 2;
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(255, 250, 240, 0.88);
       color: var(--mother-earth);
+      font-size: 0.74rem;
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(81, 50, 41, 0.12);
     }
 
-    .store-about p {
-      margin: 0 auto;
-      max-width: 680px;
-      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
-      font-size: clamp(0.98rem, 2vw, 1.08rem);
-      font-weight: 400;
-      line-height: 1.75;
-      color: rgba(81, 50, 41, 0.78);
-    }
-
-    .store-signature {
-      margin: 34px auto 0;
+    .empty-state {
+      padding: 40px 20px;
       text-align: center;
-      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
-      font-size: 0.98rem;
-      font-weight: 400;
-      line-height: 1.8;
-      color: rgba(81, 50, 41, 0.78);
+      background: rgba(255, 250, 240, 0.6);
+      border-radius: var(--radius);
+      grid-column: 1 / -1;
     }
 
-    .store-signature a {
-      color: var(--ocean-blue);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .store-signature a:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      padding: 32px 0 0;
-      color: rgba(81, 50, 41, 0.58);
-      font-size: 0.92rem;
-    }
-
-    .scroll-reveal {
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(81, 50, 41, 0.36);
       opacity: 0;
-      transform: translateY(34px);
-      transition:
-        opacity 750ms ease,
-        transform 750ms cubic-bezier(.22,.8,.25,1);
-      will-change: opacity, transform;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+      z-index: 30;
     }
 
-    .scroll-reveal.revealed {
+    .overlay.open {
       opacity: 1;
-      transform: translateY(0);
+      pointer-events: auto;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-      }
-
-      .scroll-reveal {
-        opacity: 1;
-        transform: none;
-      }
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(480px, 100%);
+      height: 100vh;
+      background: var(--background);
+      box-shadow: -20px 0 60px rgba(81, 50, 41, 0.22);
+      transform: translateX(105%);
+      transition: transform 220ms ease;
+      z-index: 40;
+      overflow-y: auto;
     }
 
-    @media (max-width: 560px) {
-      .site-shell {
-        width: min(100% - 16px, 1180px);
-        padding-top: 8px;
-      }
+    .drawer.open {
+      transform: translateX(0);
+    }
 
-      .store-banner {
-        height: 105px;
-        border-radius: 20px;
-      }
+    .drawer-inner {
+      padding: 18px;
+    }
 
-      .store-about {
-        border-radius: 20px;
-      }
+    .drawer-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 2;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 250, 240, 0.92);
+      color: var(--mother-earth);
+      cursor: pointer;
+      font-size: 1.4rem;
+      box-shadow: 0 8px 20px rgba(81, 50, 41, 0.12);
+    }
 
-      .store-banner-logo {
-        height: 100%;
-        width: auto;
-        max-width: 100%;
-      }
+    .drawer-media {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #d2d2c9;
+    }
 
-      .top-header {
-        flex-direction: column;
-        gap: 12px;
-        position: relative;
+    .drawer-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .drawer-media.no-image {
+      display: none;
+    }
+
+    .drawer-next-image {
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255, 250, 240, 0.9);
+      color: var(--mother-earth);
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(81, 50, 41, 0.14);
+    }
+
+    .drawer-content {
+      padding: 22px 4px 8px;
+    }
+
+    .drawer-ref {
+      display: inline-flex;
+      margin-bottom: 10px;
+      border-radius: 999px;
+      padding: 7px 11px;
+      background: var(--the-bay);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .drawer-title {
+      margin: 0;
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+      line-height: 1.1;
+    }
+
+    .drawer-price {
+      margin: 10px 0 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--ocean-blue);
+    }
+
+    .drawer-description,
+    .drawer-note,
+    .drawer-size {
+      margin: 16px 0 0;
+      line-height: 1.7;
+      font-size: 0.98rem;
+    }
+
+    .drawer-note {
+      padding: 12px 14px;
+      background: rgba(252, 230, 183, 0.58);
+      border-radius: 16px;
+    }
+
+    .drawer-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .want-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 18px;
+      background: var(--mother-earth);
+      color: var(--background);
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 12px 28px rgba(81, 50, 41, 0.18);
+    }
+
+    .instagram-btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 999px;
+      padding: 14px 18px;
+      background: var(--the-bay);
+      color: var(--mother-earth);
+      font-weight: 800;
+    }
+
+    .copy-note {
+      min-height: 22px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 900px) {
+      .gallery {
+        grid-template-columns: repeat(3, 1fr);
       }
 
       .floating-actions {
         position: static;
+        margin-left: 12px;
+      }
+
+      .top-header {
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-shell {
+        width: min(100% - 18px, 1180px);
+        padding-top: 10px;
+      }
+
+      .top-header {
+        padding: 12px 0 16px;
       }
 
       .logo-img {
-        width: min(220px, 70vw);
+        width: min(210px, 52vw);
       }
 
-      .coming-soon h2 {
-        font-size: clamp(3.1rem, 17vw, 5.8rem);
-        letter-spacing: -0.07em;
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pill {
+        padding: 9px 12px;
+        font-size: 0.82rem;
+      }
+
+      .drawer-inner {
+        padding: 12px;
+      }
+
+      .drawer-media {
+        border-radius: 18px;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="site-shell">
-    <header class="top-header scroll-reveal">
-      <a class="logo-link" href="#top" aria-label="Bible Bites, voltar ao início">
-        <img class="logo-img" src="imagens/logo.png.png" alt="Bible Bites" />
+  <div class="site-shell">
+    <header class="top-header">
+      <a class="logo-link" href="#" aria-label="Bible Bites">
+        <img class="logo-img" src="imagens/logo.png" alt="Bible Bites">
       </a>
 
-      <div class="floating-actions">
-        <a class="pill" href="https://www.instagram.com/biblebites.store?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer">Instagram</a>
-        <button class="pill" id="showSavedBtn" type="button">♡ guardados</button>
-      </div>
+      <nav class="floating-actions" aria-label="Redes sociais">
+        <a
+          class="pill"
+          href="https://www.instagram.com/biblebites.store/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Instagram
+        </a>
+      </nav>
     </header>
 
-    <section class="gallery-heading scroll-reveal" id="top" aria-labelledby="galleryTitle">
-      <h1 id="galleryTitle">BIBLE BITES - ARTIGOS</h1>
+    <section class="gallery-heading">
+      <h1>Estojos</h1>
+      <p>Escolhe o teu estojo preferido. Ao carregar em “Eu quero!”, abrimos o chat do Instagram da Bible Bites Store.</p>
     </section>
 
-    <nav class="filters scroll-reveal" aria-label="Filtros de artigos">
-      <button class="filter-btn active" type="button" data-filter="todos">Todos</button>
-      <button class="filter-btn" type="button" data-filter="charms">Charms</button>
-      <button class="filter-btn" type="button" data-filter="estojos">Estojos</button>
-      <button class="filter-btn" type="button" data-filter="guardados">Guardados</button>
-    </nav>
+    <main id="gallery" class="gallery" aria-live="polite"></main>
+  </div>
 
-    <section class="coming-soon scroll-reveal" id="brevemente" aria-label="Artigos disponíveis em breve">
-      <h2>BREVEMENTE</h2>
-    </section>
+  <div id="overlay" class="overlay" aria-hidden="true"></div>
 
-    <section class="store-banner scroll-reveal" aria-label="Banner Bible Bites">
-      <img class="store-banner-logo" src="imagens/logo%20Bible%20bites%20store.png" alt="Bible Bites Store" />
-    </section>
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-inner">
+      <button id="closeDrawerBtn" class="drawer-close" type="button" aria-label="Fechar">×</button>
 
-    <section class="store-about scroll-reveal" aria-label="Sobre a Bible Bites">
-      <div class="store-about-inner">
-        <h2>BIBLE BITES?</h2>
-
-        <p>
-          Bible Bites (store) surgiu como extensão à conta de instagram @biblebites.pt e é uma pequena loja criada para transformar mensagens bíblicas em artigos simples, bonitos e com significado. Cada peça é pensada para recordar a Palavra de Deus no dia a dia, seja para uso pessoal, para oferecer ou para partilhar fé de forma criativa.
-        </p>
-
-        <p class="store-signature">
-          Obrigada por estares aqui,<br>
-          Inês Ratilal — criadora de
-          <a href="https://www.instagram.com/biblebites.pt" target="_blank" rel="noreferrer">@biblebites.pt</a>
-        </p>
+      <div id="drawerMedia" class="drawer-media">
+        <img id="drawerImg" src="" alt="">
+        <button id="drawerNextImageBtn" class="drawer-next-image" type="button">Ver mais</button>
       </div>
-    </section>
 
-    <footer class="scroll-reveal">
-      © Bible Bites · Vê o catálogo no site e encomenda por mensagem direta · instagram: @biblebites.pt
-    </footer>
-  </main>
+      <div class="drawer-content">
+        <span id="drawerRef" class="drawer-ref"></span>
+        <h2 id="drawerTitle" class="drawer-title"></h2>
+        <p id="drawerPrice" class="drawer-price"></p>
+        <p id="drawerDescription" class="drawer-description"></p>
+        <p><strong>Tamanho:</strong> <span id="drawerSize" class="drawer-size"></span></p>
+        <p id="drawerNote" class="drawer-note"></p>
+
+        <div class="drawer-actions">
+          <button id="wantBtn" class="want-btn" type="button">Eu quero!</button>
+
+          <a
+            class="instagram-btn"
+            href="https://www.instagram.com/biblebites.store/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ver Instagram
+          </a>
+
+          <div id="copyNote" class="copy-note" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
 
   <script>
-    /* revalidacao 2026-06-03 | brevemente-sem-produtos */
+    const INSTAGRAM_PROFILE_URL = "https://www.instagram.com/biblebites.store/";
+    const INSTAGRAM_CHAT_URL = "https://ig.me/m/biblebites.store";
 
-    const filterButtons = document.querySelectorAll(".filter-btn");
-    const showSavedBtn = document.querySelector("#showSavedBtn");
+    /*
+      Coloca aqui apenas os produtos da categoria "estojos".
 
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("revealed");
-          revealObserver.unobserve(entry.target);
+      Campos usados:
+      - ref: referência do artigo
+      - titulo: nome do artigo
+      - preco: preço
+      - categoria: deve ser "estojos"
+      - tamanho: tamanho/medida
+      - descricao: descrição curta
+      - nota: nota opcional
+      - imagem, imagem2, imagem3: caminhos das imagens
+    */
+
+    const produtos = [
+      {
+        ref: "BB-ESTOJO-001",
+        titulo: "Estojo Bible Bites",
+        preco: "8 €",
+        categoria: "estojos",
+        tamanho: "único",
+        descricao: "Estojo prático para guardar canetas, marcadores, acessórios ou pequenos materiais do dia a dia.",
+        nota: "Produto sujeito à disponibilidade de stock.",
+        imagem: "imagens/estojo-001.jpg",
+        imagem2: "imagens/estojo-001-2.jpg",
+        imagem3: "imagens/estojo-001-3.jpg"
+      },
+      {
+        ref: "BB-ESTOJO-002",
+        titulo: "Estojo Fé",
+        preco: "8 €",
+        categoria: "estojos",
+        tamanho: "único",
+        descricao: "Estojo leve e funcional, pensado para acompanhar a rotina, a escola, a faculdade ou o trabalho.",
+        nota: "As cores podem variar ligeiramente conforme a luz da fotografia.",
+        imagem: "imagens/estojo-002.jpg",
+        imagem2: "imagens/estojo-002-2.jpg",
+        imagem3: "imagens/estojo-002-3.jpg"
+      }
+    ];
+
+    const gallery = document.querySelector("#gallery");
+    const drawer = document.querySelector("#drawer");
+    const overlay = document.querySelector("#overlay");
+    const closeDrawerBtn = document.querySelector("#closeDrawerBtn");
+    const drawerMedia = document.querySelector("#drawerMedia");
+    const drawerImg = document.querySelector("#drawerImg");
+    const drawerNextImageBtn = document.querySelector("#drawerNextImageBtn");
+    const drawerRef = document.querySelector("#drawerRef");
+    const drawerTitle = document.querySelector("#drawerTitle");
+    const drawerPrice = document.querySelector("#drawerPrice");
+    const drawerDescription = document.querySelector("#drawerDescription");
+    const drawerNote = document.querySelector("#drawerNote");
+    const drawerSize = document.querySelector("#drawerSize");
+    const wantBtn = document.querySelector("#wantBtn");
+    const copyNote = document.querySelector("#copyNote");
+
+    let produtoAtivo = null;
+    let drawerImageIndex = 0;
+
+    function normalizarTexto(texto) {
+      return String(texto || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function produtoEhEstojo(produto) {
+      const categoria = normalizarTexto(produto.categoria);
+      const titulo = normalizarTexto(produto.titulo);
+
+      return categoria.includes("estojo") || titulo.includes("estojo");
+    }
+
+    function getProductImages(produto) {
+      return [produto.imagem, produto.imagem2, produto.imagem3]
+        .filter(Boolean);
+    }
+
+    function renderGallery() {
+      gallery.innerHTML = "";
+
+      const produtosVisiveis = produtos.filter(produtoEhEstojo);
+
+      if (!produtosVisiveis.length) {
+        gallery.innerHTML = `
+          <div class="empty-state">
+            <strong>Não há estojos disponíveis neste momento.</strong>
+          </div>
+        `;
+        return;
+      }
+
+      produtosVisiveis.forEach((produto) => {
+        const card = document.createElement("button");
+        card.className = "product-card";
+        card.type = "button";
+        card.setAttribute("aria-label", `Ver ${produto.titulo}`);
+
+        const imagens = getProductImages(produto);
+
+        const imagensPreview = imagens.length >= 3
+          ? [imagens[0], imagens[1], imagens[2], imagens[0]]
+          : imagens.length === 2
+            ? [imagens[0], imagens[1], imagens[0]]
+            : imagens.length === 1
+              ? [imagens[0], imagens[0], imagens[0]]
+              : [];
+
+        card.classList.toggle("image-count-3", imagens.length >= 3);
+
+        if (!imagensPreview.length) {
+          card.classList.add("no-image");
+          card.innerHTML = `<span class="ref-chip">${produto.ref}</span>`;
+        } else {
+          card.innerHTML = `
+            <div class="product-image-window" aria-hidden="true">
+              <div class="product-image-track">
+                ${imagensPreview.map((imagem) => `<img src="${imagem}" alt="" loading="lazy" />`).join("")}
+              </div>
+            </div>
+            <span class="ref-chip">${produto.ref}</span>
+          `;
+
+          const firstImg = card.querySelector("img");
+
+          firstImg.addEventListener("error", () => {
+            card.classList.add("no-image");
+            card.innerHTML = `<span class="ref-chip">${produto.ref}</span>`;
+          }, { once: true });
         }
-      });
-    }, {
-      threshold: 0.12,
-      rootMargin: "0px 0px -40px 0px"
-    });
 
-    function observeRevealElements() {
-      document.querySelectorAll(".scroll-reveal:not(.revealed)").forEach((element) => {
-        revealObserver.observe(element);
+        card.addEventListener("click", () => openDrawer(produto));
+        gallery.appendChild(card);
       });
     }
 
-    function activateFilter(filterName = "todos") {
-      filterButtons.forEach((button) => {
-        button.classList.toggle("active", button.dataset.filter === filterName);
-      });
+    function openDrawer(produto) {
+      produtoAtivo = produto;
+      drawerImageIndex = 0;
+
+      updateDrawerImage();
+
+      drawerRef.textContent = produto.ref;
+      drawerTitle.textContent = produto.titulo;
+      drawerPrice.textContent = produto.preco;
+      drawerDescription.textContent = produto.descricao;
+      drawerNote.textContent = produto.nota || "";
+      drawerNote.hidden = !produto.nota;
+      drawerSize.textContent = produto.tamanho || "Não indicado";
+      copyNote.textContent = "";
+
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      document.body.classList.add("drawer-open");
+      drawer.setAttribute("aria-hidden", "false");
+      overlay.setAttribute("aria-hidden", "false");
     }
 
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        activateFilter(button.dataset.filter);
-      });
+    function updateDrawerImage() {
+      if (!produtoAtivo) return;
+
+      const imagens = getProductImages(produtoAtivo);
+      const imagemAtual = imagens[drawerImageIndex] || imagens[0];
+      const temImagem = Boolean(imagens[0]);
+
+      drawerImg.onerror = null;
+      drawerMedia.classList.toggle("no-image", !temImagem);
+      drawerNextImageBtn.hidden = !temImagem || imagens.length <= 1;
+
+      drawerImg.src = temImagem ? imagemAtual : "";
+      drawerImg.alt = temImagem ? `${produtoAtivo.titulo} — imagem ${drawerImageIndex + 1}` : "";
+
+      drawerImg.onerror = () => {
+        drawerMedia.classList.add("no-image");
+        drawerNextImageBtn.hidden = true;
+        drawerImg.src = "";
+        drawerImg.alt = "";
+      };
+    }
+
+    function showNextDrawerImage(event) {
+      event.stopPropagation();
+
+      if (!produtoAtivo) return;
+
+      const imagens = getProductImages(produtoAtivo);
+
+      if (!imagens.length) return;
+
+      drawerImageIndex = (drawerImageIndex + 1) % imagens.length;
+      updateDrawerImage();
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      document.body.classList.remove("drawer-open");
+      drawer.setAttribute("aria-hidden", "true");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    async function copyMessage(message) {
+      try {
+        await navigator.clipboard.writeText(message);
+        copyNote.textContent = "Mensagem copiada. Se o Instagram não a preencher, cola no chat.";
+      } catch (error) {
+        copyNote.textContent = "Se o Instagram não preencher a mensagem, copia a referência: " + produtoAtivo.ref;
+      }
+    }
+
+    function abrirInstagram() {
+      if (!produtoAtivo) return;
+
+      const mensagem = `Olá! Quero comprar/reservar o artigo "${produtoAtivo.ref}" — ${produtoAtivo.titulo}.`;
+      copyMessage(mensagem);
+
+      window.open(INSTAGRAM_CHAT_URL, "_blank", "noopener,noreferrer");
+    }
+
+    drawerNextImageBtn.addEventListener("click", showNextDrawerImage);
+    wantBtn.addEventListener("click", abrirInstagram);
+    closeDrawerBtn.addEventListener("click", closeDrawer);
+    overlay.addEventListener("click", closeDrawer);
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeDrawer();
     });
 
-    showSavedBtn.addEventListener("click", () => {
-      activateFilter("guardados");
-
-      window.scrollTo({
-        top: document.querySelector(".filters").offsetTop - 80,
-        behavior: "smooth"
-      });
-    });
-
-    observeRevealElements();
+    renderGallery();
   </script>
 </body>
 </html>
