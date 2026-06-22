@@ -170,7 +170,6 @@
 
     .product-card:hover .product-image-track {
       animation: productImageScroll 5.8s ease-in-out infinite;
-      animation: productImageScroll2 5.8s ease-in-out infinite;
     }
 
     .product-card.image-count-3 .product-image-track {
@@ -202,7 +201,6 @@
     }
 
     @keyframes productImageScroll {
-    @keyframes productImageScroll2 {
       0%, 34% {
         transform: translateX(0);
       }
@@ -532,7 +530,7 @@
     }
 
     .store-banner {
-      margin: 48px auto 0;
+      margin: 48px auto 16px;
       background: #ffe189;
       padding: 0;
       width: 100%;
@@ -546,9 +544,9 @@
     }
 
     .store-banner-logo {
-      height: 100%;
+      height: 72%;
       width: auto;
-      max-width: 100%;
+      max-width: 92%;
       display: block;
       object-fit: contain;
       object-position: center;
@@ -733,9 +731,9 @@
       }
 
       .store-banner-logo {
-        height: 100%;
+        height: 70%;
         width: auto;
-        max-width: 100%;
+        max-width: 90%;
       }
 
       .top-header {
@@ -787,7 +785,7 @@
 
     <nav class="filters scroll-reveal" aria-label="Filtros de artigos">
       <button class="filter-btn active" type="button" data-filter="todos">Todos</button>
-      <button class="filter-btn" type="button" data-filter="charms">Charms</button>
+      <button class="filter-btn" type="button" data-filter="charms">Pendentes</button>
       <button class="filter-btn" type="button" data-filter="estojos">Estojos</button>
       <button class="filter-btn" type="button" data-filter="guardados">Guardados</button>
     </nav>
@@ -876,8 +874,7 @@
         preco: "6 €",
         categoria: "charms",
         tamanho: "único",
-        nota: "A combinação de frutos não é fixa!.",
-        nota: "Os frutos são aleatórios.",
+        nota: "Os frutos são aleatórios. A combinação de frutos não é fixa.",
         imagem: "imagens/bb-001.jpg.jpeg.png",
         imagem2: "imagens/bb-001-2.png.png",
         imagem3: "imagens/bb-001-3.png"
@@ -1019,7 +1016,6 @@
 
         const imagens = getProductImages(produto);
         const imagensPreview = imagens.length >= 3
-          ? imagens.slice(0, 3)
           ? [imagens[0], imagens[1], imagens[2], imagens[0]]
           : imagens.length === 2
             ? [imagens[0], imagens[1], imagens[0]]
