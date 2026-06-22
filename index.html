@@ -169,6 +169,7 @@
     }
 
     .product-card:hover .product-image-track {
+      animation: productImageScroll 5.8s ease-in-out infinite;
       animation: productImageScroll2 5.8s ease-in-out infinite;
     }
 
@@ -200,6 +201,7 @@
       filter: saturate(1.03) contrast(1.01);
     }
 
+    @keyframes productImageScroll {
     @keyframes productImageScroll2 {
       0%, 34% {
         transform: translateX(0);
@@ -774,7 +776,8 @@
       </a>
 
       <div class="floating-actions">
-        <a class="pill" href="https://www.instagram.com/biblebites.store/" target="_blank" rel="noreferrer">Instagram</a>
+        <a class="pill" href="https://www.instagram.com/biblebites.pt?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer">Instagram</a>
+        <button class="pill" id="showSavedBtn" type="button">♡ guardados</button>
       </div>
     </header>
 
@@ -784,8 +787,9 @@
 
     <nav class="filters scroll-reveal" aria-label="Filtros de artigos">
       <button class="filter-btn active" type="button" data-filter="todos">Todos</button>
-      <button class="filter-btn" type="button" data-filter="guardados">Guardados</button>
+      <button class="filter-btn" type="button" data-filter="charms">Charms</button>
       <button class="filter-btn" type="button" data-filter="estojos">Estojos</button>
+      <button class="filter-btn" type="button" data-filter="guardados">Guardados</button>
     </nav>
 
     <section class="gallery" id="gallery" aria-label="Galeria de artigos"></section>
@@ -862,7 +866,7 @@
 
   <script>
     /* revalidacao 2026-06-02 | modal-produto-suave */
-    const INSTAGRAM_USERNAME = "biblebites.store";
+    const INSTAGRAM_USERNAME = "biblebites.pt";
 
     const produtos = [
       {
@@ -872,6 +876,7 @@
         preco: "6 €",
         categoria: "charms",
         tamanho: "único",
+        nota: "A combinação de frutos não é fixa!.",
         nota: "Os frutos são aleatórios.",
         imagem: "imagens/bb-001.jpg.jpeg.png",
         imagem2: "imagens/bb-001-2.png.png",
@@ -931,6 +936,7 @@
     const copyNote = document.querySelector("#copyNote");
     const closeDrawerBtn = document.querySelector("#closeDrawerBtn");
     const filterButtons = document.querySelectorAll(".filter-btn");
+    const showSavedBtn = document.querySelector("#showSavedBtn");
 
     let produtoAtivo = null;
     let drawerImageIndex = 0;
@@ -976,9 +982,6 @@
     }
 
     function produtoVisivel(produto) {
-      const eEstojo = produto.categoria === "estojos";
-
-      if (!eEstojo) return false;
       if (filtroAtivo === "guardados") return isSaved(produto.ref);
       if (filtroAtivo === "todos") return true;
       return produto.categoria === filtroAtivo;
@@ -1016,6 +1019,7 @@
 
         const imagens = getProductImages(produto);
         const imagensPreview = imagens.length >= 3
+          ? imagens.slice(0, 3)
           ? [imagens[0], imagens[1], imagens[2], imagens[0]]
           : imagens.length === 2
             ? [imagens[0], imagens[1], imagens[0]]
@@ -1134,7 +1138,7 @@
       const mensagem = `Olá! Quero comprar/reservar o artigo "${produtoAtivo.ref}"`;
       copyMessage(mensagem);
 
-      const instagramUrl = `https://ig.me/m/${INSTAGRAM_USERNAME}`;
+      const instagramUrl = `https://ig.me/m/${INSTAGRAM_USERNAME}?text=${encodeURIComponent(mensagem)}`;
       window.open(instagramUrl, "_blank", "noopener,noreferrer");
     }
 
@@ -1149,6 +1153,20 @@
       });
     });
 
+    showSavedBtn.addEventListener("click", () => {
+      filtroAtivo = "guardados";
+
+      filterButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.filter === "guardados");
+      });
+
+      renderGallery();
+
+      window.scrollTo({
+        top: document.querySelector(".filters").offsetTop - 80,
+        behavior: "smooth"
+      });
+    });
 
     drawerNextImageBtn.addEventListener("click", showNextDrawerImage);
     wantBtn.addEventListener("click", abrirInstagram);
