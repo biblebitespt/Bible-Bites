@@ -611,12 +611,17 @@
     }
 
     .scroll-reveal {
-      opacity: 0;
-      transform: translateY(34px);
+      opacity: 1;
+      transform: translateY(0);
       transition:
         opacity 750ms ease,
         transform 750ms cubic-bezier(.22,.8,.25,1);
       will-change: opacity, transform;
+    }
+
+    .scroll-reveal.pending-reveal {
+      opacity: 0;
+      transform: translateY(34px);
     }
 
     .scroll-reveal.revealed {
@@ -816,7 +821,7 @@
 
     <footer class="scroll-reveal">
       © Bible Bites · Vê o catálogo no site e encomenda por mensagem direta · instagram: @biblebites.pt
-      © Bible Bites · Vê o catálogo no site e encomenda por mensagem direta · instagram: @biblbebites.store
+      © Bible Bites · Vê o catálogo no site e encomenda por mensagem direta · instagram: @biblebites.store
     </footer>
   </main>
 
@@ -866,8 +871,8 @@
 
   <script>
     /* revalidacao 2026-06-02 | modal-produto-suave */
-    const INSTAGRAM_USERNAME = "biblebites.pt";
     const INSTAGRAM_USERNAME = "biblebites.store";
+    const SAVED_STORAGE_KEY = "bibleBitesGuardados";
 
     const produtos = [
       {
@@ -877,7 +882,6 @@
         preco: "6 €",
         categoria: "charms",
         tamanho: "único",
-        nota: "Os frutos são aleatórios. A combinação de frutos não é fixa.",
         nota: "Os frutos são aleatórios. As combinações são únicas!",
         imagem: "imagens/bb-001.jpg.jpeg.png",
         imagem2: "imagens/bb-001-2.png.png",
@@ -942,28 +946,59 @@
     let produtoAtivo = null;
     let drawerImageIndex = 0;
     let filtroAtivo = "todos";
-    const savedRefs = new Set(JSON.parse(localStorage.getItem("bibleBitesGuardados") || "[]"));
+    function loadSavedRefs() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(SAVED_STORAGE_KEY) || "[]");
+        return Array.isArray(saved) ? saved : [];
+      } catch (error) {
+        return [];
+      }
+    }
 
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("revealed");
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.12,
-      rootMargin: "0px 0px -40px 0px"
-    });
+    const savedRefs = new Set(loadSavedRefs());
+
+    const revealObserver = "IntersectionObserver" in window
+      ? new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("revealed");
+              entry.target.classList.remove("pending-reveal");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.12,
+          rootMargin: "0px 0px -40px 0px"
+        })
+      : null;
 
     function observeRevealElements() {
       document.querySelectorAll(".scroll-reveal:not(.revealed)").forEach((element) => {
+        if (!revealObserver) {
+          element.classList.add("revealed");
+          element.classList.remove("pending-reveal");
+          return;
+        }
+
+        element.classList.add("pending-reveal");
         revealObserver.observe(element);
       });
     }
 
+    function escapeAttribute(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
     function saveStorage() {
-      localStorage.setItem("bibleBitesGuardados", JSON.stringify([...savedRefs]));
+      try {
+        localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify([...savedRefs]));
+      } catch (error) {
+        // Se o armazenamento local estiver bloqueado, o site continua a funcionar.
+      }
     }
 
     function isSaved(ref) {
@@ -1030,10 +1065,10 @@
         card.innerHTML = `
           <div class="product-image-window" aria-hidden="true">
             <div class="product-image-track">
-              ${imagensPreview.map((imagem) => `<img src="${imagem}" alt="" loading="lazy" />`).join("")}
+              ${imagensPreview.map((imagem) => `<img src="${escapeAttribute(imagem)}" alt="" loading="lazy" />`).join("")}
             </div>
           </div>
-          <span class="ref-chip">${produto.ref}</span>
+          <span class="ref-chip">${escapeAttribute(produto.ref)}</span>
           <span class="heart-badge ${isSaved(produto.ref) ? "saved" : ""}" aria-hidden="true">${isSaved(produto.ref) ? "♥" : "♡"}</span>
         `;
 
@@ -1075,7 +1110,6 @@
       drawer.setAttribute("aria-hidden", "false");
       overlay.setAttribute("aria-hidden", "false");
     }
-
 
     function updateDrawerImage() {
       if (!produtoAtivo) return;
@@ -1176,6 +1210,13 @@
 
     window.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeDrawer();
+    });
+
+    window.addEventListener("error", () => {
+      document.querySelectorAll(".scroll-reveal").forEach((element) => {
+        element.classList.add("revealed");
+        element.classList.remove("pending-reveal");
+      });
     });
 
     renderGallery();
