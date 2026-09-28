@@ -152,6 +152,8 @@
       cursor: pointer;
       overflow: hidden;
       display: block;
+      font-family: inherit;
+      color: inherit;
     }
 
     .product-image-window {
@@ -227,16 +229,35 @@
       }
     }
 
+    /* Espaço vazio intencional na grelha (produto sem imagem definida) */
     .product-card.no-image {
       background: transparent;
       cursor: default;
       pointer-events: none;
     }
 
-    .product-card.no-image img,
-    .product-card.no-image .ref-chip,
-    .product-card.no-image .heart-badge {
-      display: none;
+    /* Produto cuja imagem não foi encontrada: continua visível e clicável */
+    .product-card.missing-image {
+      background: var(--something-blue);
+    }
+
+    .missing-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: rgba(81, 50, 41, 0.7);
+    }
+
+    .missing-label strong {
+      font-size: 1rem;
+      color: var(--mother-earth);
     }
 
     .heart-badge {
@@ -334,7 +355,7 @@
     }
 
     .drawer-media.no-image {
-      background: transparent;
+      background: var(--something-blue);
     }
 
     .drawer-media img {
@@ -370,6 +391,10 @@
       backdrop-filter: blur(8px);
       transition: transform 180ms ease, background 180ms ease;
       z-index: 2;
+    }
+
+    .drawer-next-image[hidden] {
+      display: none;
     }
 
     .drawer-next-image:hover {
@@ -793,12 +818,12 @@
       <button class="filter-btn active" type="button" data-filter="todos">Todos</button>
       <button class="filter-btn" type="button" data-filter="charms">Pendentes</button>
       <button class="filter-btn" type="button" data-filter="estojos">Estojos</button>
-      <button class="filter-btn" type="button" data-filter="Cadernos">Cadernos</button>
+      <button class="filter-btn" type="button" data-filter="cadernos">Cadernos</button>
       <button class="filter-btn" type="button" data-filter="guardados">Guardados</button>
     </nav>
 
     <section class="gallery" id="gallery" aria-label="Galeria de artigos"></section>
-    <section class="empty-state scroll-reveal" id="emptyState">Ainda não há artigos guardados.</section>
+    <section class="empty-state" id="emptyState">Ainda não há artigos guardados.</section>
 
     <section class="store-banner scroll-reveal" aria-label="Banner Bible Bites">
       <img class="store-banner-logo" src="imagens/logo%20Bible%20bites%20store.png" alt="Bible Bites Store" />
@@ -829,7 +854,7 @@
 
   <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Detalhe do artigo">
     <div class="drawer-media">
-      <img id="drawerImg" src="" alt="" />
+      <img id="drawerImg" alt="" />
       <button class="drawer-next-image" id="drawerNextImageBtn" type="button" aria-label="Ver imagem seguinte">›</button>
     </div>
 
@@ -870,9 +895,10 @@
   </aside>
 
   <script>
-    /* revalidacao 2026-06-02 | modal-produto-suave */
+    /* revisao 2026-09-28 | corrigido: sintaxe, caminhos de imagens, ciclo de erros */
     const INSTAGRAM_USERNAME = "biblebites.store";
     const SAVED_STORAGE_KEY = "bibleBitesGuardados";
+    const PASTA_IMAGENS = "imagens/";
 
     const produtos = [
       {
@@ -897,8 +923,7 @@
         nota: "",
         imagem: "imagens/bb-002.jpg.jpeg.png",
         imagem2: "imagens/bb-002-2.png"
-      }
-      ,
+      },
       {
         ref: "Estojo João 15:12",
         titulo: "João 15:12",
@@ -924,14 +949,14 @@
       {
         ref: "Caderno",
         titulo: "Abelha",
-        descricao: 'Caderno de bolso com caneta para te ajudar a não deixares escapar nada de importante',
+        descricao: "Caderno de bolso com caneta para te ajudar a não deixares escapar nada de importante",
         preco: "15 €",
-        categoria: "Cadernos",
+        categoria: "cadernos",
         tamanho: "10.5 cm x 10.5 cm",
         nota: "Brevemente disponível",
-        imagem: "imagens/caderno.jpeg",
-        imagem2: "imagens/cadernox4.jpeg",
-        imagem3: "imagens/caderno verso.jpeg"
+        imagem: "caderno.jpeg",
+        imagem2: "cadernox4.jpeg",
+        imagem3: "caderno verso.jpeg"
       }
     ];
 
@@ -958,6 +983,9 @@
     let produtoAtivo = null;
     let drawerImageIndex = 0;
     let filtroAtivo = "todos";
+
+    /* ---------- Guardados (localStorage) ---------- */
+
     function loadSavedRefs() {
       try {
         const saved = JSON.parse(localStorage.getItem(SAVED_STORAGE_KEY) || "[]");
@@ -968,6 +996,32 @@
     }
 
     const savedRefs = new Set(loadSavedRefs());
+
+    function saveStorage() {
+      try {
+        localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify([...savedRefs]));
+      } catch (error) {
+        // Se o armazenamento local estiver bloqueado, o site continua a funcionar.
+      }
+    }
+
+    function isSaved(ref) {
+      return savedRefs.has(ref);
+    }
+
+    function toggleSaved(ref) {
+      if (savedRefs.has(ref)) {
+        savedRefs.delete(ref);
+      } else {
+        savedRefs.add(ref);
+      }
+
+      saveStorage();
+      renderGallery();
+      updateSaveButton();
+    }
+
+    /* ---------- Animação ao fazer scroll ---------- */
 
     const revealObserver = "IntersectionObserver" in window
       ? new IntersectionObserver((entries) => {
@@ -997,37 +1051,49 @@
       });
     }
 
-    function escapeAttribute(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/"/g, "&quot;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+    /* ---------- Imagens (com caminho alternativo) ---------- */
+
+    function getProductImages(produto) {
+      return [produto.imagem, produto.imagem2, produto.imagem3]
+        .filter(Boolean)
+        .map((imagem) => String(imagem).trim())
+        .filter(Boolean);
     }
 
-    function saveStorage() {
-      try {
-        localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify([...savedRefs]));
-      } catch (error) {
-        // Se o armazenamento local estiver bloqueado, o site continua a funcionar.
-      }
+    function hasImage(produto) {
+      return getProductImages(produto).length > 0;
     }
 
-    function isSaved(ref) {
-      return savedRefs.has(ref);
+    // Se a imagem não existir no caminho indicado, tenta com/sem a pasta "imagens/".
+    function caminhosPossiveis(caminho) {
+      const alternativo = caminho.startsWith(PASTA_IMAGENS)
+        ? caminho.slice(PASTA_IMAGENS.length)
+        : PASTA_IMAGENS + caminho;
+      return [caminho, alternativo];
     }
 
-    function toggleSaved(ref) {
-      if (savedRefs.has(ref)) {
-        savedRefs.delete(ref);
-      } else {
-        savedRefs.add(ref);
-      }
+    function carregarImagem(img, caminho, aoFalhar) {
+      const tentativas = caminhosPossiveis(caminho);
+      let indice = 0;
 
-      saveStorage();
-      renderGallery();
-      updateSaveButton();
+      img.onerror = () => {
+        indice += 1;
+        if (indice < tentativas.length) {
+          img.src = tentativas[indice];
+          return;
+        }
+
+        // Desliga o handler antes de limpar, para não entrar em ciclo de erros.
+        img.onerror = null;
+        img.removeAttribute("src");
+        console.warn("Imagem não encontrada:", tentativas.join("  |  "));
+        if (aoFalhar) aoFalhar();
+      };
+
+      img.src = tentativas[0];
     }
+
+    /* ---------- Galeria ---------- */
 
     function produtoVisivel(produto) {
       if (filtroAtivo === "guardados") return isSaved(produto.ref);
@@ -1035,20 +1101,33 @@
       return produto.categoria === filtroAtivo;
     }
 
-    function getProductImages(produto) {
-      return [produto.imagem, produto.imagem2, produto.imagem3]
-        .filter(Boolean)
-        .map((imagem) => imagem.trim())
-        .filter(Boolean);
-    }
+    function mostrarPlaceholder(card, produto) {
+      if (card.classList.contains("missing-image")) return;
 
-    function hasImage(produto) {
-      return Boolean(getProductImages(produto)[0]);
+      card.classList.add("missing-image");
+      card.classList.remove("image-count-3");
+      card.innerHTML = "";
+
+      const label = document.createElement("span");
+      label.className = "missing-label";
+
+      const titulo = document.createElement("strong");
+      titulo.textContent = produto.titulo;
+
+      const aviso = document.createElement("span");
+      aviso.textContent = "Imagem indisponível";
+
+      label.append(titulo, aviso);
+      card.appendChild(label);
     }
 
     function renderGallery() {
       gallery.innerHTML = "";
       const filtrados = produtos.filter(produtoVisivel);
+
+      emptyState.textContent = filtroAtivo === "guardados"
+        ? "Ainda não há artigos guardados."
+        : "Não há artigos nesta categoria.";
       emptyState.classList.toggle("show", filtrados.length === 0);
 
       filtrados.forEach((produto) => {
@@ -1057,6 +1136,7 @@
         card.type = "button";
         card.setAttribute("aria-label", `Abrir artigo ${produto.ref}`);
 
+        // Produto sem imagem definida: fica como espaço vazio na grelha.
         if (!hasImage(produto)) {
           card.classList.add("no-image");
           card.setAttribute("aria-hidden", "true");
@@ -1074,31 +1154,48 @@
 
         card.classList.toggle("image-count-3", imagens.length >= 3);
 
-        card.innerHTML = `
-          <div class="product-image-window" aria-hidden="true">
-            <div class="product-image-track">
-              ${imagensPreview.map((imagem) => `<img src="${escapeAttribute(imagem)}" alt="" loading="lazy" />`).join("")}
-            </div>
-          </div>
-          <span class="ref-chip">${escapeAttribute(produto.ref)}</span>
-          <span class="heart-badge ${isSaved(produto.ref) ? "saved" : ""}" aria-hidden="true">${isSaved(produto.ref) ? "♥" : "♡"}</span>
-        `;
+        const janela = document.createElement("div");
+        janela.className = "product-image-window";
+        janela.setAttribute("aria-hidden", "true");
 
-        const firstImg = card.querySelector("img");
+        const track = document.createElement("div");
+        track.className = "product-image-track";
 
-        firstImg.addEventListener("error", () => {
-          card.classList.add("no-image");
-          card.innerHTML = "";
-          card.setAttribute("aria-hidden", "true");
-          card.tabIndex = -1;
-        }, { once: true });
+        imagensPreview.forEach((caminho, indice) => {
+          const img = document.createElement("img");
+          img.alt = "";
+          img.decoding = "async";
+          track.appendChild(img);
 
+          carregarImagem(img, caminho, () => {
+            if (indice === 0) {
+              mostrarPlaceholder(card, produto);
+            } else {
+              img.style.visibility = "hidden";
+            }
+          });
+        });
+
+        janela.appendChild(track);
+
+        const chip = document.createElement("span");
+        chip.className = "ref-chip";
+        chip.textContent = produto.ref;
+
+        const heart = document.createElement("span");
+        heart.className = "heart-badge" + (isSaved(produto.ref) ? " saved" : "");
+        heart.setAttribute("aria-hidden", "true");
+        heart.textContent = isSaved(produto.ref) ? "♥" : "♡";
+
+        card.append(janela, chip, heart);
         card.addEventListener("click", () => openDrawer(produto));
         gallery.appendChild(card);
       });
 
       observeRevealElements();
     }
+
+    /* ---------- Janela de detalhe ---------- */
 
     function openDrawer(produto) {
       produtoAtivo = produto;
@@ -1121,28 +1218,35 @@
       document.body.classList.add("drawer-open");
       drawer.setAttribute("aria-hidden", "false");
       overlay.setAttribute("aria-hidden", "false");
+      closeDrawerBtn.focus({ preventScroll: true });
     }
 
     function updateDrawerImage() {
       if (!produtoAtivo) return;
 
       const imagens = getProductImages(produtoAtivo);
-      const imagemAtual = imagens[drawerImageIndex] || imagens[0];
-      const temImagem = Boolean(imagens[0]);
+      const temImagem = imagens.length > 0;
 
       drawerImg.onerror = null;
       drawerMedia.classList.toggle("no-image", !temImagem);
       drawerNextImageBtn.hidden = !temImagem || imagens.length <= 1;
 
-      drawerImg.src = temImagem ? imagemAtual : "";
-      drawerImg.alt = temImagem ? `${produtoAtivo.titulo} — imagem ${drawerImageIndex + 1}` : "";
-
-      drawerImg.onerror = () => {
-        drawerMedia.classList.add("no-image");
-        drawerNextImageBtn.hidden = true;
-        drawerImg.src = "";
+      if (!temImagem) {
+        drawerImg.removeAttribute("src");
         drawerImg.alt = "";
-      };
+        return;
+      }
+
+      const imagemAtual = imagens[drawerImageIndex] || imagens[0];
+      drawerImg.alt = `${produtoAtivo.titulo} — imagem ${drawerImageIndex + 1}`;
+
+      carregarImagem(drawerImg, imagemAtual, () => {
+        drawerImg.alt = "";
+        if (imagens.length <= 1) {
+          drawerMedia.classList.add("no-image");
+          drawerNextImageBtn.hidden = true;
+        }
+      });
     }
 
     function showNextDrawerImage(event) {
@@ -1150,9 +1254,12 @@
       if (!produtoAtivo) return;
 
       const imagens = getProductImages(produtoAtivo);
+      if (imagens.length === 0) return;
+
       drawerImageIndex = (drawerImageIndex + 1) % imagens.length;
       updateDrawerImage();
     }
+
     function closeDrawer() {
       drawer.classList.remove("open");
       overlay.classList.remove("open");
@@ -1168,6 +1275,8 @@
       saveBtn.textContent = saved ? "♥" : "♡";
       saveBtn.setAttribute("aria-label", saved ? "Remover dos guardados" : "Guardar artigo");
     }
+
+    /* ---------- Encomenda por Instagram ---------- */
 
     async function copyMessage(message) {
       try {
@@ -1187,6 +1296,8 @@
       const instagramUrl = `https://ig.me/m/${INSTAGRAM_USERNAME}?text=${encodeURIComponent(mensagem)}`;
       window.open(instagramUrl, "_blank", "noopener,noreferrer");
     }
+
+    /* ---------- Eventos ---------- */
 
     filterButtons.forEach((button) => {
       button.addEventListener("click", () => {
@@ -1222,13 +1333,6 @@
 
     window.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeDrawer();
-    });
-
-    window.addEventListener("error", () => {
-      document.querySelectorAll(".scroll-reveal").forEach((element) => {
-        element.classList.add("revealed");
-        element.classList.remove("pending-reveal");
-      });
     });
 
     renderGallery();
