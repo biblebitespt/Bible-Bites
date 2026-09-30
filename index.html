@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="pt">
 <head>
@@ -162,87 +163,70 @@
       overflow: hidden;
     }
 
+    /*
+      O track contém:
+      - 3 imagens + cópia da primeira = 400%
+      - 2 imagens + cópia da primeira = 300%
+      - 1 imagem = 100%
+    */
     .product-image-track {
-      width: 300%;
       height: 100%;
       display: flex;
       transform: translateX(0);
       will-change: transform;
-    }
-
-    .product-card:hover .product-image-track {
-      animation: productImageScroll 2.4s linear infinite;
+      transition: transform 550ms cubic-bezier(.22, .8, .25, 1);
     }
 
     .product-card.image-count-3 .product-image-track {
       width: 400%;
     }
 
-    .product-card.image-count-3:hover .product-image-track {
-      animation: productImageScroll3 3.6s linear infinite;
+    .product-card.image-count-2 .product-image-track {
+      width: 300%;
+    }
+
+    .product-card.image-count-1 .product-image-track {
+      width: 100%;
     }
 
     .product-image-track img {
-      width: calc(100% / 3);
       height: 100%;
       object-fit: cover;
       display: block;
       transform: scale(1.001);
       transition: filter 220ms ease;
       filter: saturate(0.95) contrast(0.96);
-      flex: 0 0 calc(100% / 3);
+      flex: 0 0 33.333333%;
+      width: 33.333333%;
     }
 
     .product-card.image-count-3 .product-image-track img {
-      width: calc(100% / 4);
-      flex-basis: calc(100% / 4);
+      flex: 0 0 25%;
+      width: 25%;
+    }
+
+    .product-card.image-count-2 .product-image-track img {
+      flex: 0 0 33.333333%;
+      width: 33.333333%;
+    }
+
+    .product-card.image-count-1 .product-image-track img {
+      flex: 0 0 100%;
+      width: 100%;
     }
 
     .product-card:hover .product-image-track img {
       filter: saturate(1.03) contrast(1.01);
     }
 
-    @keyframes productImageScroll {
-      0% {
-        transform: translateX(-33.333333%);
-      }
-      33.333333% {
-        transform: translateX(-66.666667%);
-      }
-      66.666667% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-33.333333%);
-      }
-    }
-
-    @keyframes productImageScroll3 {
-      0% {
-        transform: translateX(-25%);
-      }
-      25% {
-        transform: translateX(-50%);
-      }
-      50% {
-        transform: translateX(-75%);
-      }
-      75% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-25%);
-      }
-    }
-
-    /* Espaço vazio intencional na grelha (produto sem imagem definida) */
+    /* Espaço vazio intencional na grelha */
     .product-card.no-image {
       background: transparent;
       cursor: default;
       pointer-events: none;
     }
 
-    /* Produto cuja imagem não foi encontrada: continua visível e clicável */
+    /* Produto cuja imagem não foi encontrada */
     .product-card.missing-image {
       background: var(--something-blue);
     }
@@ -280,6 +264,7 @@
       place-items: center;
       font-size: 20px;
       backdrop-filter: blur(8px);
+      z-index: 3;
     }
 
     .heart-badge.saved {
@@ -300,6 +285,7 @@
       opacity: 0;
       transform: translateY(-4px);
       transition: opacity 180ms ease, transform 180ms ease;
+      z-index: 3;
     }
 
     .product-card:hover .ref-chip {
@@ -713,8 +699,8 @@
         transform: none;
       }
 
-      .product-card:hover .product-image-track {
-        animation: none;
+      .product-image-track {
+        transition: none !important;
       }
     }
 
@@ -804,6 +790,7 @@
 
 <body>
   <main class="site-shell">
+
     <header class="top-header scroll-reveal">
       <a class="logo-link" href="#top" aria-label="Bible Bites, voltar ao início">
         <img class="logo-img" src="imagens/logo.png.png" alt="Bible Bites" />
@@ -811,8 +798,12 @@
 
       <div class="floating-actions">
         <a class="pill" href="https://www.instagram.com/biblebites.pt?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer">@biblebites.pt</a>
+
         <a class="pill" href="https://www.instagram.com/biblebites.store/" target="_blank" rel="noreferrer">@biblebites.store</a>
-        <button class="pill" id="showSavedBtn" type="button">♡ guardados</button>
+
+        <button class="pill" id="showSavedBtn" type="button">
+          ♡ guardados
+        </button>
       </div>
     </header>
 
@@ -829,14 +820,22 @@
     </nav>
 
     <section class="gallery" id="gallery" aria-label="Galeria de artigos"></section>
-    <section class="empty-state" id="emptyState">Ainda não há artigos guardados.</section>
+
+    <section class="empty-state" id="emptyState">
+      Ainda não há artigos guardados.
+    </section>
 
     <section class="store-banner scroll-reveal" aria-label="Banner Bible Bites">
-      <img class="store-banner-logo" src="imagens/logo%20Bible%20bites%20store.png" alt="Bible Bites Store" />
+      <img
+        class="store-banner-logo"
+        src="imagens/logo%20Bible%20bites%20store.png"
+        alt="Bible Bites Store"
+      />
     </section>
 
     <section class="store-about scroll-reveal" aria-label="Sobre a Bible Bites">
       <div class="store-about-inner">
+
         <h2>BIBLE BITES?</h2>
 
         <p>
@@ -846,49 +845,100 @@
         <p class="store-signature">
           Obrigada por estares aqui,<br>
           Inês Ratilal — criadora de
-          <a href="https://www.instagram.com/biblebites.pt" target="_blank" rel="noreferrer">@biblebites.pt</a>
+          <a
+            href="https://www.instagram.com/biblebites.pt"
+            target="_blank"
+            rel="noreferrer"
+          >@biblebites.pt</a>
         </p>
+
       </div>
     </section>
 
     <footer class="scroll-reveal">
       © Bible Bites · Vê o catálogo no site e encomenda por mensagem direta · instagram: @biblebites.store
     </footer>
+
   </main>
 
   <div class="overlay" id="overlay" aria-hidden="true"></div>
 
-  <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Detalhe do artigo">
+  <aside
+    class="drawer"
+    id="drawer"
+    aria-hidden="true"
+    aria-label="Detalhe do artigo"
+  >
+
     <div class="drawer-media">
+
       <img id="drawerImg" alt="" />
-      <button class="drawer-next-image" id="drawerNextImageBtn" type="button" aria-label="Ver imagem seguinte">›</button>
+
+      <button
+        class="drawer-next-image"
+        id="drawerNextImageBtn"
+        type="button"
+        aria-label="Ver imagem seguinte"
+      >
+        ›
+      </button>
+
     </div>
 
     <div class="drawer-info">
-      <button class="close-btn" id="closeDrawerBtn" type="button" aria-label="Fechar">×</button>
+
+      <button
+        class="close-btn"
+        id="closeDrawerBtn"
+        type="button"
+        aria-label="Fechar"
+      >
+        ×
+      </button>
 
       <div>
+
         <p class="detail-kicker" id="drawerRef"></p>
+
         <h3 id="drawerTitle"></h3>
+
         <p class="price" id="drawerPrice"></p>
+
         <p class="description" id="drawerDescription"></p>
 
         <div class="meta-grid">
+
           <div class="meta">
             <span>Nota</span>
             <strong id="drawerNote"></strong>
           </div>
+
           <div class="meta">
             <span>Tamanho</span>
             <strong id="drawerSize"></strong>
           </div>
+
         </div>
+
       </div>
 
       <div>
+
         <div class="cta-row">
-          <button class="want-btn" id="wantBtn" type="button">🛒 Eu quero!</button>
-          <button class="save-btn" id="saveBtn" type="button" aria-label="Guardar artigo">♡</button>
+
+          <button class="want-btn" id="wantBtn" type="button">
+            🛒 Eu quero!
+          </button>
+
+          <button
+            class="save-btn"
+            id="saveBtn"
+            type="button"
+            aria-label="Guardar artigo"
+          >
+            ♡
+          </button>
+
         </div>
 
         <p class="order-help">
@@ -896,17 +946,25 @@
         </p>
 
         <p class="copy-note" id="copyNote"></p>
+
       </div>
+
     </div>
+
   </aside>
 
   <script>
-    /* revisao 2026-09-28 | corrigido: sintaxe, caminhos de imagens, ciclo de erros */
+
+    /* ============================================================
+       CONFIGURAÇÃO
+    ============================================================ */
+
     const INSTAGRAM_USERNAME = "biblebites.store";
     const SAVED_STORAGE_KEY = "bibleBitesGuardados";
     const PASTA_IMAGENS = "imagens/";
 
     const produtos = [
+
       {
         ref: "Frutos do Espírito",
         titulo: "Frutos do Espírito",
@@ -919,6 +977,7 @@
         imagem2: "imagens/bb-001-2.png.png",
         imagem3: "imagens/bb-001-3.png"
       },
+
       {
         ref: "Lírios",
         titulo: "Lírios",
@@ -930,6 +989,7 @@
         imagem: "imagens/bb-002.jpg.jpeg.png",
         imagem2: "imagens/bb-002-2.png"
       },
+
       {
         ref: "Estojo João 15:12",
         titulo: "João 15:12",
@@ -941,6 +1001,7 @@
         imagem: "imagens/Estojo J1512.png",
         imagem2: "imagens/Estojo João 1512.jpeg"
       },
+
       {
         ref: "Estojo Eclesiastes 3:1",
         titulo: "Eclesiastes 3:1",
@@ -952,6 +1013,7 @@
         imagem: "imagens/Estojo Ec31.png",
         imagem2: "imagens/Estojo Eclesiastes 31.jpeg"
       },
+
       {
         ref: "Caderno - Abelha",
         titulo: "Abelha - Azul",
@@ -959,414 +1021,1184 @@
         preco: "15 €",
         categoria: "cadernos",
         tamanho: "10.5 cm x 10.5 cm",
-        nota: "Outras 3cores disponíveis!",
+        nota: "Outras 3 cores disponíveis!",
         imagem: "caderno.jpeg",
         imagem2: "cadernox4.jpeg",
         imagem3: "caderno verso.jpeg"
       },
-     {
+
+      {
         ref: "Caderno - Abelha",
         titulo: "Abelha - Roxo",
         descricao: "Caderno de bolso roxo com caneta para te ajudar a não deixares escapar nada de importante.",
         preco: "15 €",
         categoria: "cadernos",
         tamanho: "10.5 cm x 10.5 cm",
-        nota: "Outras 3cores disponíveis!",
+        nota: "Outras 3 cores disponíveis!",
         imagem: "WhatsApp Image 2026-09-28 at 15.39.52.jpeg",
         imagem2: "cadernox4.jpeg",
         imagem3: "caderno verso.jpeg"
       },
-    {
+
+      {
         ref: "Caderno - Abelha",
         titulo: "Abelha - Rosa",
         descricao: "Caderno de bolso roxo com caneta para te ajudar a não deixares escapar nada de importante.",
         preco: "15 €",
         categoria: "cadernos",
         tamanho: "10.5 cm x 10.5 cm",
-        nota: "Outras 3cores disponíveis!",
+        nota: "Outras 3 cores disponíveis!",
         imagem: "caderno rosa.png",
         imagem2: "cadernox4.jpeg",
         imagem3: "caderno verso.jpeg"
       }
+
     ];
+
+
+    /* ============================================================
+       ELEMENTOS
+    ============================================================ */
 
     const gallery = document.querySelector("#gallery");
     const drawer = document.querySelector("#drawer");
     const overlay = document.querySelector("#overlay");
     const emptyState = document.querySelector("#emptyState");
+
     const drawerMedia = document.querySelector(".drawer-media");
     const drawerImg = document.querySelector("#drawerImg");
     const drawerNextImageBtn = document.querySelector("#drawerNextImageBtn");
+
     const drawerRef = document.querySelector("#drawerRef");
     const drawerTitle = document.querySelector("#drawerTitle");
     const drawerPrice = document.querySelector("#drawerPrice");
     const drawerDescription = document.querySelector("#drawerDescription");
     const drawerNote = document.querySelector("#drawerNote");
     const drawerSize = document.querySelector("#drawerSize");
+
     const wantBtn = document.querySelector("#wantBtn");
     const saveBtn = document.querySelector("#saveBtn");
     const copyNote = document.querySelector("#copyNote");
+
     const closeDrawerBtn = document.querySelector("#closeDrawerBtn");
+
     const filterButtons = document.querySelectorAll(".filter-btn");
     const showSavedBtn = document.querySelector("#showSavedBtn");
+
+
+    /* ============================================================
+       ESTADO
+    ============================================================ */
 
     let produtoAtivo = null;
     let drawerImageIndex = 0;
     let filtroAtivo = "todos";
 
-    /* ---------- Guardados (localStorage) ---------- */
+
+    /* ============================================================
+       GUARDADOS
+    ============================================================ */
 
     function loadSavedRefs() {
+
       try {
-        const saved = JSON.parse(localStorage.getItem(SAVED_STORAGE_KEY) || "[]");
+
+        const saved = JSON.parse(
+          localStorage.getItem(SAVED_STORAGE_KEY) || "[]"
+        );
+
         return Array.isArray(saved) ? saved : [];
+
       } catch (error) {
+
         return [];
+
       }
+
     }
+
 
     const savedRefs = new Set(loadSavedRefs());
 
+
     function saveStorage() {
+
       try {
-        localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify([...savedRefs]));
+
+        localStorage.setItem(
+          SAVED_STORAGE_KEY,
+          JSON.stringify([...savedRefs])
+        );
+
       } catch (error) {
-        // Se o armazenamento local estiver bloqueado, o site continua a funcionar.
+
+        // Continua a funcionar mesmo sem localStorage.
+
       }
+
     }
+
 
     function isSaved(ref) {
+
       return savedRefs.has(ref);
+
     }
 
+
     function toggleSaved(ref) {
+
       if (savedRefs.has(ref)) {
+
         savedRefs.delete(ref);
+
       } else {
+
         savedRefs.add(ref);
+
       }
 
       saveStorage();
+
       renderGallery();
+
       updateSaveButton();
+
     }
 
-    /* ---------- Animação ao fazer scroll ---------- */
+
+    /* ============================================================
+       ANIMAÇÃO AO FAZER SCROLL
+    ============================================================ */
 
     const revealObserver = "IntersectionObserver" in window
-      ? new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("revealed");
-              entry.target.classList.remove("pending-reveal");
-              revealObserver.unobserve(entry.target);
-            }
-          });
-        }, {
-          threshold: 0.12,
-          rootMargin: "0px 0px -40px 0px"
-        })
+
+      ? new IntersectionObserver(
+
+          (entries) => {
+
+            entries.forEach((entry) => {
+
+              if (entry.isIntersecting) {
+
+                entry.target.classList.add("revealed");
+
+                entry.target.classList.remove("pending-reveal");
+
+                revealObserver.unobserve(entry.target);
+
+              }
+
+            });
+
+          },
+
+          {
+            threshold: 0.12,
+            rootMargin: "0px 0px -40px 0px"
+          }
+
+        )
+
       : null;
 
+
     function observeRevealElements() {
-      document.querySelectorAll(".scroll-reveal:not(.revealed)").forEach((element) => {
-        if (!revealObserver) {
-          element.classList.add("revealed");
-          element.classList.remove("pending-reveal");
-          return;
-        }
 
-        element.classList.add("pending-reveal");
-        revealObserver.observe(element);
-      });
-    }
+      document
+        .querySelectorAll(".scroll-reveal:not(.revealed)")
+        .forEach((element) => {
 
-    /* ---------- Imagens (com caminho alternativo) ---------- */
+          if (!revealObserver) {
 
-    function getProductImages(produto) {
-      return [produto.imagem, produto.imagem2, produto.imagem3]
-        .filter(Boolean)
-        .map((imagem) => String(imagem).trim())
-        .filter(Boolean);
-    }
+            element.classList.add("revealed");
 
-    function hasImage(produto) {
-      return getProductImages(produto).length > 0;
-    }
+            element.classList.remove("pending-reveal");
 
-    // Se a imagem não existir no caminho indicado, tenta com/sem a pasta "imagens/".
-    function caminhosPossiveis(caminho) {
-      const alternativo = caminho.startsWith(PASTA_IMAGENS)
-        ? caminho.slice(PASTA_IMAGENS.length)
-        : PASTA_IMAGENS + caminho;
-      return [caminho, alternativo];
-    }
+            return;
 
-    function carregarImagem(img, caminho, aoFalhar) {
-      const tentativas = caminhosPossiveis(caminho);
-      let indice = 0;
+          }
 
-      img.onerror = () => {
-        indice += 1;
-        if (indice < tentativas.length) {
-          img.src = tentativas[indice];
-          return;
-        }
+          element.classList.add("pending-reveal");
 
-        // Desliga o handler antes de limpar, para não entrar em ciclo de erros.
-        img.onerror = null;
-        img.removeAttribute("src");
-        console.warn("Imagem não encontrada:", tentativas.join("  |  "));
-        if (aoFalhar) aoFalhar();
-      };
+          revealObserver.observe(element);
 
-      img.src = tentativas[0];
-    }
-
-    /* ---------- Galeria ---------- */
-
-    function produtoVisivel(produto) {
-      if (filtroAtivo === "guardados") return isSaved(produto.ref);
-      if (filtroAtivo === "todos") return true;
-      return produto.categoria === filtroAtivo;
-    }
-
-    function mostrarPlaceholder(card, produto) {
-      if (card.classList.contains("missing-image")) return;
-
-      card.classList.add("missing-image");
-      card.classList.remove("image-count-3");
-      card.innerHTML = "";
-
-      const label = document.createElement("span");
-      label.className = "missing-label";
-
-      const titulo = document.createElement("strong");
-      titulo.textContent = produto.titulo;
-
-      const aviso = document.createElement("span");
-      aviso.textContent = "Imagem indisponível";
-
-      label.append(titulo, aviso);
-      card.appendChild(label);
-    }
-
-    function renderGallery() {
-      gallery.innerHTML = "";
-      const filtrados = produtos.filter(produtoVisivel);
-
-      emptyState.textContent = filtroAtivo === "guardados"
-        ? "Ainda não há artigos guardados."
-        : "Não há artigos nesta categoria.";
-      emptyState.classList.toggle("show", filtrados.length === 0);
-
-      filtrados.forEach((produto) => {
-        const card = document.createElement("button");
-        card.className = "product-card scroll-reveal";
-        card.type = "button";
-        card.setAttribute("aria-label", `Abrir artigo ${produto.ref}`);
-
-        // Produto sem imagem definida: fica como espaço vazio na grelha.
-        if (!hasImage(produto)) {
-          card.classList.add("no-image");
-          card.setAttribute("aria-hidden", "true");
-          card.tabIndex = -1;
-          gallery.appendChild(card);
-          return;
-        }
-
-        const imagens = getProductImages(produto);
-        const imagensPreview = imagens.length >= 3
-          ? [imagens[0], imagens[1], imagens[2], imagens[0]]
-          : imagens.length === 2
-            ? [imagens[0], imagens[1], imagens[0]]
-            : [imagens[0], imagens[0], imagens[0]];
-
-        card.classList.toggle("image-count-3", imagens.length >= 3);
-
-        const janela = document.createElement("div");
-        janela.className = "product-image-window";
-        janela.setAttribute("aria-hidden", "true");
-
-        const track = document.createElement("div");
-        track.className = "product-image-track";
-
-        imagensPreview.forEach((caminho, indice) => {
-          const img = document.createElement("img");
-          img.alt = "";
-          img.decoding = "async";
-          track.appendChild(img);
-
-          carregarImagem(img, caminho, () => {
-            if (indice === 0) {
-              mostrarPlaceholder(card, produto);
-            } else {
-              img.style.visibility = "hidden";
-            }
-          });
         });
 
-        janela.appendChild(track);
-
-        const chip = document.createElement("span");
-        chip.className = "ref-chip";
-        chip.textContent = produto.ref;
-
-        const heart = document.createElement("span");
-        heart.className = "heart-badge" + (isSaved(produto.ref) ? " saved" : "");
-        heart.setAttribute("aria-hidden", "true");
-        heart.textContent = isSaved(produto.ref) ? "♥" : "♡";
-
-        card.append(janela, chip, heart);
-        card.addEventListener("click", () => openDrawer(produto));
-        gallery.appendChild(card);
-      });
-
-      observeRevealElements();
     }
 
-    /* ---------- Janela de detalhe ---------- */
 
-    function openDrawer(produto) {
-      produtoAtivo = produto;
-      drawerImageIndex = 0;
+    /* ============================================================
+       IMAGENS
+    ============================================================ */
 
-      updateDrawerImage();
+    function getProductImages(produto) {
 
-      drawerRef.textContent = produto.ref;
-      drawerTitle.textContent = produto.titulo;
-      drawerPrice.textContent = produto.preco;
-      drawerDescription.textContent = produto.descricao;
-      drawerNote.textContent = produto.nota || "";
-      drawerSize.textContent = produto.tamanho;
-      copyNote.textContent = "";
+      return [
+        produto.imagem,
+        produto.imagem2,
+        produto.imagem3
+      ]
 
-      updateSaveButton();
+        .filter(Boolean)
 
-      drawer.classList.add("open");
-      overlay.classList.add("open");
-      document.body.classList.add("drawer-open");
-      drawer.setAttribute("aria-hidden", "false");
-      overlay.setAttribute("aria-hidden", "false");
-      closeDrawerBtn.focus({ preventScroll: true });
+        .map((imagem) => String(imagem).trim())
+
+        .filter(Boolean);
+
     }
 
-    function updateDrawerImage() {
-      if (!produtoAtivo) return;
 
-      const imagens = getProductImages(produtoAtivo);
-      const temImagem = imagens.length > 0;
+    function hasImage(produto) {
 
-      drawerImg.onerror = null;
-      drawerMedia.classList.toggle("no-image", !temImagem);
-      drawerNextImageBtn.hidden = !temImagem || imagens.length <= 1;
+      return getProductImages(produto).length > 0;
 
-      if (!temImagem) {
-        drawerImg.removeAttribute("src");
-        drawerImg.alt = "";
+    }
+
+
+    function caminhosPossiveis(caminho) {
+
+      const alternativo = caminho.startsWith(PASTA_IMAGENS)
+
+        ? caminho.slice(PASTA_IMAGENS.length)
+
+        : PASTA_IMAGENS + caminho;
+
+      return [
+        caminho,
+        alternativo
+      ];
+
+    }
+
+
+    function carregarImagem(img, caminho, aoFalhar) {
+
+      const tentativas = caminhosPossiveis(caminho);
+
+      let indice = 0;
+
+
+      img.onerror = () => {
+
+        indice += 1;
+
+        if (indice < tentativas.length) {
+
+          img.src = tentativas[indice];
+
+          return;
+
+        }
+
+
+        img.onerror = null;
+
+        img.removeAttribute("src");
+
+        console.warn(
+          "Imagem não encontrada:",
+          tentativas.join("  |  ")
+        );
+
+
+        if (aoFalhar) {
+
+          aoFalhar();
+
+        }
+
+      };
+
+
+      img.src = tentativas[0];
+
+    }
+
+
+    /* ============================================================
+       PREVIEW DAS IMAGENS AO PASSAR O RATO
+       
+       COMPORTAMENTO:
+
+       Cursor entra
+          ↓
+       imagem 1 → imagem 2
+          ↓
+       espera 2 segundos
+          ↓
+       imagem 2 → imagem 3
+          ↓
+       espera 2 segundos
+          ↓
+       imagem 3 → imagem 1
+          ↓
+       repete
+       
+       Ao sair:
+       volta para imagem 1.
+    ============================================================ */
+
+    function iniciarPreviewImagens(
+      card,
+      track,
+      quantidadeImagens
+    ) {
+
+      if (quantidadeImagens <= 1) {
         return;
       }
 
-      const imagemAtual = imagens[drawerImageIndex] || imagens[0];
-      drawerImg.alt = `${produtoAtivo.titulo} — imagem ${drawerImageIndex + 1}`;
 
-      carregarImagem(drawerImg, imagemAtual, () => {
-        drawerImg.alt = "";
-        if (imagens.length <= 1) {
-          drawerMedia.classList.add("no-image");
-          drawerNextImageBtn.hidden = true;
+      let indiceAtual = 0;
+      let timer = null;
+      let ativo = false;
+
+
+      /*
+        Para 3 imagens:
+
+        imagem 1 = 0%
+        imagem 2 = -25%
+        imagem 3 = -50%
+        cópia imagem 1 = -75%
+
+        Para 2 imagens:
+
+        imagem 1 = 0%
+        imagem 2 = -33.333%
+        cópia imagem 1 = -66.666%
+      */
+
+      const passo = quantidadeImagens >= 3
+        ? 25
+        : 33.333333;
+
+
+      const ultimaPosicao = quantidadeImagens >= 3
+        ? 3
+        : 2;
+
+
+      function limparTimer() {
+
+        if (timer) {
+
+          clearTimeout(timer);
+
+          timer = null;
+
         }
-      });
+
+      }
+
+
+      function moverPara(
+        indice,
+        animar = true
+      ) {
+
+        track.style.transition = animar
+
+          ? "transform 550ms cubic-bezier(.22,.8,.25,1)"
+
+          : "none";
+
+
+        track.style.transform =
+          `translateX(-${indice * passo}%)`;
+
+
+        indiceAtual = indice;
+
+      }
+
+
+      function iniciarCiclo() {
+
+        if (!ativo) {
+          return;
+        }
+
+
+        /*
+          Espera 2 segundos na imagem atual
+          antes de passar para a seguinte.
+        */
+
+        timer = setTimeout(() => {
+
+          if (!ativo) {
+            return;
+          }
+
+
+          const proximaPosicao = indiceAtual + 1;
+
+
+          /*
+            Ainda estamos nas imagens reais.
+          */
+
+          if (proximaPosicao < ultimaPosicao) {
+
+            moverPara(
+              proximaPosicao,
+              true
+            );
+
+
+            /*
+              Espera a transição de 550ms
+              terminar e depois deixa a
+              nova imagem parada durante 2s.
+            */
+
+            timer = setTimeout(() => {
+
+              if (!ativo) {
+                return;
+              }
+
+              iniciarCiclo();
+
+            }, 550);
+
+
+            return;
+
+          }
+
+
+          /*
+            Chegámos à cópia da imagem 1.
+            
+            Fazemos:
+            
+            imagem 3 → cópia da imagem 1
+            
+            Depois, sem animação,
+            voltamos à imagem 1 verdadeira.
+          */
+
+          moverPara(
+            ultimaPosicao,
+            true
+          );
+
+
+          timer = setTimeout(() => {
+
+            if (!ativo) {
+              return;
+            }
+
+
+            /*
+              Reset invisível para a primeira
+              imagem verdadeira.
+            */
+
+            moverPara(
+              0,
+              false
+            );
+
+
+            /*
+              Força o browser a aplicar
+              imediatamente o reset.
+            */
+
+            void track.offsetWidth;
+
+
+            /*
+              Começa imediatamente:
+              imagem 1 → imagem 2
+            */
+
+            moverPara(
+              1,
+              true
+            );
+
+
+            /*
+              Depois da passagem para a imagem 2,
+              fica 2 segundos nela.
+            */
+
+            timer = setTimeout(() => {
+
+              if (!ativo) {
+                return;
+              }
+
+              iniciarCiclo();
+
+            }, 550);
+
+          }, 550);
+
+
+        }, 2000);
+
+      }
+
+
+      /*
+        CURSOR ENTROU
+      */
+
+      card.addEventListener(
+        "mouseenter",
+        () => {
+
+          ativo = true;
+
+          limparTimer();
+
+
+          /*
+            Imagem 1 → imagem 2
+            imediatamente.
+          */
+
+          moverPara(
+            1,
+            true
+          );
+
+
+          /*
+            Espera a transição acabar
+            e depois mantém imagem 2
+            durante 2 segundos.
+          */
+
+          timer = setTimeout(() => {
+
+            if (!ativo) {
+              return;
+            }
+
+            iniciarCiclo();
+
+          }, 550);
+
+        }
+      );
+
+
+      /*
+        CURSOR SAIU
+      */
+
+      card.addEventListener(
+        "mouseleave",
+        () => {
+
+          ativo = false;
+
+          limparTimer();
+
+
+          /*
+            Volta à imagem 1.
+          */
+
+          moverPara(
+            0,
+            true
+          );
+
+        }
+      );
+
     }
+
+
+    /* ============================================================
+       GALERIA
+    ============================================================ */
+
+    function produtoVisivel(produto) {
+
+      if (filtroAtivo === "guardados") {
+
+        return isSaved(produto.ref);
+
+      }
+
+
+      if (filtroAtivo === "todos") {
+
+        return true;
+
+      }
+
+
+      return produto.categoria === filtroAtivo;
+
+    }
+
+
+    function mostrarPlaceholder(
+      card,
+      produto
+    ) {
+
+      if (
+        card.classList.contains("missing-image")
+      ) {
+
+        return;
+
+      }
+
+
+      card.classList.add("missing-image");
+
+      card.classList.remove(
+        "image-count-3",
+        "image-count-2",
+        "image-count-1"
+      );
+
+
+      card.innerHTML = "";
+
+
+      const label =
+        document.createElement("span");
+
+      label.className =
+        "missing-label";
+
+
+      const titulo =
+        document.createElement("strong");
+
+      titulo.textContent =
+        produto.titulo;
+
+
+      const aviso =
+        document.createElement("span");
+
+      aviso.textContent =
+        "Imagem indisponível";
+
+
+      label.append(
+        titulo,
+        aviso
+      );
+
+
+      card.appendChild(label);
+
+    }
+
+
+    function renderGallery() {
+
+      gallery.innerHTML = "";
+
+
+      const filtrados =
+        produtos.filter(produtoVisivel);
+
+
+      emptyState.textContent =
+        filtroAtivo === "guardados"
+
+          ? "Ainda não há artigos guardados."
+
+          : "Não há artigos nesta categoria.";
+
+
+      emptyState.classList.toggle(
+        "show",
+        filtrados.length === 0
+      );
+
+
+      filtrados.forEach((produto) => {
+
+        const card =
+          document.createElement("button");
+
+
+        card.className =
+          "product-card scroll-reveal";
+
+
+        card.type = "button";
+
+
+        card.setAttribute(
+          "aria-label",
+          `Abrir artigo ${produto.ref}`
+        );
+
+
+        /*
+          Produto sem imagem.
+        */
+
+        if (!hasImage(produto)) {
+
+          card.classList.add(
+            "no-image"
+          );
+
+
+          card.setAttribute(
+            "aria-hidden",
+            "true"
+          );
+
+
+          card.tabIndex = -1;
+
+
+          gallery.appendChild(card);
+
+          return;
+
+        }
+
+
+        const imagens =
+          getProductImages(produto);
+
+
+        /*
+          Criamos uma cópia da primeira
+          imagem no final.
+
+          3 imagens:
+          [1, 2, 3, 1]
+
+          2 imagens:
+          [1, 2, 1]
+
+          1 imagem:
+          [1]
+        */
+
+        let imagensPreview;
+
+
+        if (imagens.length >= 3) {
+
+          imagensPreview = [
+            imagens[0],
+            imagens[1],
+            imagens[2],
+            imagens[0]
+          ];
+
+        } else if (imagens.length === 2) {
+
+          imagensPreview = [
+            imagens[0],
+            imagens[1],
+            imagens[0]
+          ];
+
+        } else {
+
+          imagensPreview = [
+            imagens[0]
+          ];
+
+        }
+
+
+        /*
+          Classe correspondente ao número
+          de imagens reais.
+        */
+
+        card.classList.toggle(
+          "image-count-3",
+          imagens.length === 3
+        );
+
+
+        card.classList.toggle(
+          "image-count-2",
+          imagens.length === 2
+        );
+
+
+        card.classList.toggle(
+          "image-count-1",
+          imagens.length === 1
+        );
+
+
+        const janela =
+          document.createElement("div");
+
+
+        janela.className =
+          "product-image-window";
+
+
+        janela.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+
+        const track =
+          document.createElement("div");
+
+
+        track.className =
+          "product-image-track";
+
+
+        imagensPreview.forEach(
+          (caminho, indice) => {
+
+            const img =
+              document.createElement("img");
+
+
+            img.alt = "";
+
+
+            img.decoding = "async";
+
+
+            track.appendChild(img);
+
+
+            carregarImagem(
+              img,
+              caminho,
+              () => {
+
+                if (indice === 0) {
+
+                  mostrarPlaceholder(
+                    card,
+                    produto
+                  );
+
+                } else {
+
+                  img.style.visibility =
+                    "hidden";
+
+                }
+
+              }
+            );
+
+          }
+        );
+
+
+        janela.appendChild(track);
+
+
+        const chip =
+          document.createElement("span");
+
+
+        chip.className =
+          "ref-chip";
+
+
+        chip.textContent =
+          produto.ref;
+
+
+        const heart =
+          document.createElement("span");
+
+
+        heart.className =
+          "heart-badge" +
+          (
+            isSaved(produto.ref)
+              ? " saved"
+              : ""
+          );
+
+
+        heart.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+
+        heart.textContent =
+          isSaved(produto.ref)
+            ? "♥"
+            : "♡";
+
+
+        card.append(
+          janela,
+          chip,
+          heart
+        );
+
+
+        /*
+          INICIA A NOVA ANIMAÇÃO.
+        */
+
+        iniciarPreviewImagens(
+          card,
+          track,
+          imagens.length
+        );
+
+
+        card.addEventListener(
+          "click",
+          () => openDrawer(produto)
+        );
+
+
+        gallery.appendChild(card);
+
+      });
+
+
+      observeRevealElements();
+
+    }
+
+
+    /* ============================================================
+       JANELA DE DETALHE
+    ============================================================ */
+
+    function openDrawer(produto) {
+
+      produtoAtivo = produto;
+
+      drawerImageIndex = 0;
+
+
+      updateDrawerImage();
+
+
+      drawerRef.textContent =
+        produto.ref;
+
+
+      drawerTitle.textContent =
+        produto.titulo;
+
+
+      drawerPrice.textContent =
+        produto.preco;
+
+
+      drawerDescription.textContent =
+        produto.descricao;
+
+
+      drawerNote.textContent =
+        produto.nota || "";
+
+
+      drawerSize.textContent =
+        produto.tamanho;
+
+
+      copyNote.textContent = "";
+
+
+      updateSaveButton();
+
+
+      drawer.classList.add("open");
+
+      overlay.classList.add("open");
+
+      document.body.classList.add(
+        "drawer-open"
+      );
+
+
+      drawer.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      overlay.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      closeDrawerBtn.focus({
+        preventScroll: true
+      });
+
+    }
+
+
+    function updateDrawerImage() {
+
+      if (!produtoAtivo) {
+        return;
+      }
+
+
+      const imagens =
+        getProductImages(produtoAtivo);
+
+
+      const temImagem =
+        imagens.length > 0;
+
+
+      drawerImg.onerror = null;
+
+
+      drawerMedia.classList.toggle(
+        "no-image",
+        !temImagem
+      );
+
+
+      drawerNextImageBtn.hidden =
+        !temImagem ||
+        imagens.length <= 1;
+
+
+      if (!temImagem) {
+
+        drawerImg.removeAttribute(
+          "src"
+        );
+
+        drawerImg.alt = "";
+
+        return;
+
+      }
+
+
+      const imagemAtual =
+        imagens[drawerImageIndex] ||
+        imagens[0];
+
+
+      drawerImg.alt =
+        `${produtoAtivo.titulo} — imagem ${drawerImageIndex + 1}`;
+
+
+      carregarImagem(
+        drawerImg,
+        imagemAtual,
+        () => {
+
+          drawerImg.alt = "";
+
+
+          if (imagens.length <= 1) {
+
+            drawerMedia.classList.add(
+              "no-image"
+            );
+
+
+            drawerNextImageBtn.hidden =
+              true;
+
+          }
+
+        }
+      );
+
+    }
+
 
     function showNextDrawerImage(event) {
+
       event.stopPropagation();
-      if (!produtoAtivo) return;
 
-      const imagens = getProductImages(produtoAtivo);
-      if (imagens.length === 0) return;
 
-      drawerImageIndex = (drawerImageIndex + 1) % imagens.length;
+      if (!produtoAtivo) {
+        return;
+      }
+
+
+      const imagens =
+        getProductImages(produtoAtivo);
+
+
+      if (imagens.length === 0) {
+        return;
+      }
+
+
+      drawerImageIndex =
+        (
+          drawerImageIndex + 1
+        ) %
+        imagens.length;
+
+
       updateDrawerImage();
+
     }
+
 
     function closeDrawer() {
+
       drawer.classList.remove("open");
+
       overlay.classList.remove("open");
-      document.body.classList.remove("drawer-open");
-      drawer.setAttribute("aria-hidden", "true");
-      overlay.setAttribute("aria-hidden", "true");
+
+      document.body.classList.remove(
+        "drawer-open"
+      );
+
+
+      drawer.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      overlay.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
     }
+
 
     function updateSaveButton() {
-      if (!produtoAtivo) return;
 
-      const saved = isSaved(produtoAtivo.ref);
-      saveBtn.textContent = saved ? "♥" : "♡";
-      saveBtn.setAttribute("aria-label", saved ? "Remover dos guardados" : "Guardar artigo");
-    }
-
-    /* ---------- Encomenda por Instagram ---------- */
-
-    async function copyMessage(message) {
-      try {
-        await navigator.clipboard.writeText(message);
-        copyNote.textContent = "Mensagem copiada. Se o Instagram não a preencher, cola no chat.";
-      } catch (error) {
-        copyNote.textContent = "Se o Instagram não preencher a mensagem, copia a referência: " + produtoAtivo.ref;
+      if (!produtoAtivo) {
+        return;
       }
-    }
 
-    function abrirInstagram() {
-      if (!produtoAtivo) return;
 
-      const mensagem = `Olá! Quero comprar/reservar o artigo "${produtoAtivo.ref}"`;
-      copyMessage(mensagem);
+      const saved =
+        isSaved(produtoAtivo.ref);
 
-      const instagramUrl = `https://ig.me/m/${INSTAGRAM_USERNAME}?text=${encodeURIComponent(mensagem)}`;
-      window.open(instagramUrl, "_blank", "noopener,noreferrer");
-    }
 
-    /* ---------- Eventos ---------- */
+      saveBtn.textContent =
+        saved ? "♥" : "♡";
 
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        filtroAtivo = button.dataset.filter;
 
-        filterButtons.forEach((btn) => btn.classList.remove("active"));
-        button.classList.add("active");
-
-        renderGallery();
-      });
-    });
-
-    showSavedBtn.addEventListener("click", () => {
-      filtroAtivo = "guardados";
-
-      filterButtons.forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.filter === "guardados");
-      });
-
-      renderGallery();
-
-      window.scrollTo({
-        top: document.querySelector(".filters").offsetTop - 80,
-        behavior: "smooth"
-      });
-    });
-
-    drawerNextImageBtn.addEventListener("click", showNextDrawerImage);
-    wantBtn.addEventListener("click", abrirInstagram);
-    saveBtn.addEventListener("click", () => produtoAtivo && toggleSaved(produtoAtivo.ref));
-    closeDrawerBtn.addEventListener("click", closeDrawer);
-    overlay.addEventListener("click", closeDrawer);
-
-    window.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeDrawer();
-    });
-
-    renderGallery();
-    observeRevealElements();
-  </script>
-</body>
-</html>
+      saveBtn.setAttribute(
+        "aria
+```
