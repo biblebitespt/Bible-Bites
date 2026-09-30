@@ -171,7 +171,7 @@
     }
 
     .product-card:hover .product-image-track {
-      animation: productImageScroll 5.8s ease-in-out infinite;
+      animation: productImageScroll 2.4s linear infinite;
     }
 
     .product-card.image-count-3 .product-image-track {
@@ -179,7 +179,7 @@
     }
 
     .product-card.image-count-3:hover .product-image-track {
-      animation: productImageScroll3 8.7s ease-in-out infinite;
+      animation: productImageScroll3 3.6s linear infinite;
     }
 
     .product-image-track img {
@@ -203,29 +203,35 @@
     }
 
     @keyframes productImageScroll {
-      0%, 34% {
-        transform: translateX(0);
-      }
-      50%, 84% {
+      0% {
         transform: translateX(-33.333333%);
       }
-      100% {
+      33.333333% {
         transform: translateX(-66.666667%);
+      }
+      66.666667% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-33.333333%);
       }
     }
 
     @keyframes productImageScroll3 {
-      0%, 22.666667% {
-        transform: translateX(0);
-      }
-      33.333333%, 56% {
+      0% {
         transform: translateX(-25%);
       }
-      66.666667%, 89.333333% {
+      25% {
         transform: translateX(-50%);
       }
-      100% {
+      50% {
         transform: translateX(-75%);
+      }
+      75% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-25%);
       }
     }
 
